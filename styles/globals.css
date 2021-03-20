@@ -1,0 +1,23 @@
+@import "fonts.css";
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Lato", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #4C63CD;
+    --bg: #060D2E;
+    --lightBg: #171A36;
+    --text: #ecececde;
+    --textSecondary: #A2A4AF;
+    --textDisabled: #6B6F8C;
+    --borderColor: #27283C;
+}

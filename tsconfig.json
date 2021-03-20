@@ -24,7 +24,8 @@
       "@/redux/*": [ "redux/*" ]
     },
     "typeRoots": [
-      "."
+      ".",
+      "@types",
     ],
     "types": [
       "reflect-metadata"

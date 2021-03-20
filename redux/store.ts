@@ -1,16 +1,12 @@
 import { createStore } from "redux";
 import { MakeStore, createWrapper, Context } from "next-redux-wrapper";
-import rootReducer from "./reducers/root";
-import { State as SignupState } from "./reducers/signup-reducer";
+import rootReducer, { State } from "./reducers/root";
 
-export type State = {
-    signupReducer: SignupState,
-}
+const initialState: State = {
+    signupReducer: {},
+};
 
-
-const makeStore: MakeStore<State> = (context: Context) => createStore(rootReducer, {
-    signupReducer: { counter: 0},
-});
+const makeStore: MakeStore<State> = (context: Context) => createStore(rootReducer, initialState);
 
 export const wrapper = createWrapper<State>(makeStore, {
    debug: process.env.MODE !== "production",
