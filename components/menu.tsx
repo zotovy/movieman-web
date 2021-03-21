@@ -8,7 +8,7 @@ const Container = styled.menu`
     justify-content: space-between;
     align-items: center;
     margin: 15px auto 0;
-    padding: 0 40px;
+    padding: 0 20px;
 
     a.company {
         height: 40px;
@@ -90,7 +90,7 @@ const Container = styled.menu`
     .mobile-search, .mobile-search-trigger {
         display: none;
     }
-    
+
 
     @media screen and (max-width: 960px) {
         padding: 0 20px;
@@ -103,11 +103,11 @@ const Container = styled.menu`
         .user-profile {
             margin-left: 10px;
         }
-        
+
         .mobile-search-trigger {
             display: block;
             margin-right: 10px;
-            
+
             img {
                 margin-top: 5px;
                 width: 25px;
@@ -127,7 +127,7 @@ const Container = styled.menu`
 
             &.closed {
                 pointer-events: none;
-                
+
                 input, img {
                     opacity: 0;
                 }

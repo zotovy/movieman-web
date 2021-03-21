@@ -61,7 +61,9 @@ const Container = styled.div`
         }
     }
 
-
+    @media screen and (max-width: 960px) {
+        width: 100%;
+    }
 `;
 
 export type Props = {
@@ -71,13 +73,15 @@ export type Props = {
     year: string;
     genres: string[];
     rating: number;
+    useFixedWidth?: boolean;
 }
 
 const MovieTile: React.FC<Props> = (props) => {
     const ratColor = FormatHelper.getRatingColor(props.rating);
+    let useFixedWidth = props.useFixedWidth ?? true;
 
     return <Link href={`/movie/${props.id}`}>
-        <Container>
+        <Container className="movie-component" style={{ width: useFixedWidth ? "420px" : "initial" }} >
             <div className="poster" style={{ backgroundImage: `url(${props.poster})` }}/>
             <div className="title">
                 <h4>{props.title}</h4>
