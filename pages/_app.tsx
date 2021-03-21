@@ -13,7 +13,8 @@ const theme = {
         textSecondary: "#A2A4AF",
         textDisabled: "#6B6F8C",
         borderColor: "#27283C"
-    }
+    },
+    centerContent: "margin: 15px auto 0;\n    max-width: 1400px;",
 }
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {

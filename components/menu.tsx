@@ -11,6 +11,7 @@ const Container = styled.menu`
     padding: 0 40px;
 
     a.company {
+        height: 40px;
         flex: 0 0 auto;
         margin-right: 72px;
         display: flex;
@@ -93,6 +94,7 @@ const Container = styled.menu`
 
     @media screen and (max-width: 960px) {
         padding: 0 20px;
+        position: relative;
 
         label {
             display: none;
@@ -126,15 +128,15 @@ const Container = styled.menu`
             &.closed {
                 pointer-events: none;
                 
-                input {
+                input, img {
                     opacity: 0;
                 }
             }
 
             input {
                 z-index: 100;
-                left: 20px;
-                top: 27px;
+                left: 0px;
+                top: 0px;
                 position: absolute;
                 width: calc(100vw - 40px);
                 background: var(--bg);
@@ -144,8 +146,8 @@ const Container = styled.menu`
                 z-index: 100;
                 width: 24px;
                 height: 24px;
-                top: 35px;
-                right: 30px;
+                top: 9px;
+                right: 9px;
                 position: absolute;
             }
         }

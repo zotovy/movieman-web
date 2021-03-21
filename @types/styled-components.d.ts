@@ -11,5 +11,6 @@ declare module "styled-components" {
             textDisabled: string,
             borderColor: string,
         };
+        centerContent: string;
     }
 }
