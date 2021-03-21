@@ -1,27 +1,27 @@
 @font-face {
     font-family: 'Lato';
-    src: url("/fonts/Lator-Regular.ttf") format('ttf');
+    src: url("/fonts/Lato-Regular.ttf") ;
     font-style: normal;
     font-weight: 400;
 }
 
 @font-face {
     font-family: 'Lato';
-    src: url("/fonts/Lator-Medium.ttf") format('ttf');
+    src: url("/fonts/Lato-Medium.ttf");
     font-style: normal;
     font-weight: 500;
 }
 
 @font-face {
     font-family: 'Lato';
-    src: url("/fonts/Lator-Bold.ttf") format('ttf');
+    src: url("/fonts/Lato-Bold.ttf");
     font-style: normal;
     font-weight: 700;
 }
 
 @font-face {
     font-family: 'Lato';
-    src: url("/fonts/Lator-Semibold.ttf") format('ttf');
+    src: url("/fonts/Lato-Semibold.ttf");
     font-style: normal;
     font-weight: 600;
 }
