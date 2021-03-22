@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import FormatHelper from "../helpers/format_helper";
+import FormatHelper from "../helpers/format-helper";
 
 export const basicMovieTileStyles = `
     width: 410px;

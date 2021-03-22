@@ -23,7 +23,8 @@
     "paths": {
       "@/redux/*": [ "redux/*" ],
       "@/utils/*": [ "utils/*" ],
-      "@/components/*": [ "components/*" ]
+      "@/components/*": [ "components/*" ],
+      "@/helpers/*": [ "helpers/*" ]
     },
     "typeRoots": [
       ".",
