@@ -46,6 +46,7 @@
     "postcss": "^8.2.8",
     "storybook-addon-styled-component-theme": "^2.0.0",
     "ts-jest": "^26.5.4",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "^4.2.3"
   },
   "jest": {
