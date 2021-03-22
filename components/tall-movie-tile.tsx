@@ -32,15 +32,15 @@ const Container = styled.div`
 
 const TallMovieTile: React.FC<Props> = (props) => {
     return <Link href={`/movie/${props.id}`}>
-        <Container className="tall-movie-component">
-            <div className="poster" style={{ backgroundImage: `url(${props.poster})`, }}/>
-            <div className="title">
+        <Container className="tall-movie-component" data-testid="tmt-container" >
+            <div className="poster" style={{ backgroundImage: `url(${props.poster})`, }} data-testid="tmt-poster"/>
+            <div className="title" data-testid="tmt-title">
                 <h4>{props.title}</h4>
             </div>
             <div className="subtitle">
-                <span className="year">{props.year}</span>
+                <span className="year" data-testid="tmt-year">{props.year}</span>
                 <div className="dot"/>
-                <span className="genre">{props.genres[0]}</span>
+                <span className="genre" data-testid="tmt-genre">{props.genres[0]}</span>
             </div>
         </Container>
     </Link>
