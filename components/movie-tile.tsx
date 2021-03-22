@@ -68,31 +68,28 @@ export const basicMovieTileStyles = `
 
 const Container = styled.div`${basicMovieTileStyles}`;
 
-export type Props = {
-    id: number;
-    poster: string;
-    title: string;
-    year: string;
-    genres: string[];
-    rating: number;
+export type Props = Omit<Movie, "reviews"> & {
     useFixedWidth?: boolean;
-}
+};
 
 const MovieTile: React.FC<Props> = (props) => {
     const ratColor = FormatHelper.getRatingColor(props.rating);
     let useFixedWidth = props.useFixedWidth ?? true;
 
     return <Link href={`/movie/${props.id}`}>
-        <Container className="movie-component" style={{ width: useFixedWidth ? "420px" : "initial" }} >
-            <div className="poster" style={{ backgroundImage: `url(${props.poster})` }}/>
-            <div className="title">
+        <Container
+                className="movie-component"
+                style={{ width: useFixedWidth ? "420px" : "initial" }}
+                data-testid="mt-container">
+            <div className="poster" style={{ backgroundImage: `url(${props.poster})` }} data-testid="mt-poster"/>
+            <div className="title" data-testid="mt-title">
                 <h4>{props.title}</h4>
-                <span className="rating" style={{ color: ratColor }}>{props.rating}</span>
+                <span className="rating" data-testid="mt-rating" style={{ color: ratColor }}>{props.rating}</span>
             </div>
             <div className="subtitle">
-                <span className="year">{props.year}</span>
+                <span className="year" data-testid="mt-year">{props.year}</span>
                 <div className="dot"/>
-                <span className="genre">{props.genres[0]}</span>
+                <span className="genre" data-testid="mt-genre">{props.genres[0]}</span>
             </div>
         </Container>
     </Link>;

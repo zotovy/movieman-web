@@ -21,14 +21,18 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@/redux/*": [ "redux/*" ]
+      "@/redux/*": [ "redux/*" ],
+      "@/utils/*": [ "utils/*" ],
+      "@/components/*": [ "components/*" ]
     },
     "typeRoots": [
       ".",
       "@types",
+      "@types/utils"
     ],
     "types": [
-      "reflect-metadata"
+      "reflect-metadata",
+      "jest"
     ]
   },
   "exclude": [
