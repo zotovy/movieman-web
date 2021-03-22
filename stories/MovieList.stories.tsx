@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import "../styles/globals.css";
 
-import MovieHorizontalList , { Props } from "../components/MovieHorizontalList";
+import MovieHorizontalList , { Props } from "../components/movie-horizontal-list";
 
 export default {
     title: 'Components/Movie Horizontal List',

@@ -3,7 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import FormatHelper from "../helpers/format_helper";
 
-const Container = styled.div`
+export const basicMovieTileStyles = `
     width: 410px;
 
     .poster {
@@ -65,6 +65,8 @@ const Container = styled.div`
         width: 100%;
     }
 `;
+
+const Container = styled.div`${basicMovieTileStyles}`;
 
 export type Props = {
     id: number;
