@@ -33,3 +33,11 @@ Tall.args = {
     id: 12,
 };
 
+const TemplateLoadingDefault: Story<{}> = () => <MovieTile isLoading={true} />
+export const LoadingDefault = TemplateLoadingDefault.bind({});
+
+const TemplateLoadingTall: Story<{}> = () => <TallMovieTile isLoading={true} />
+export const LoadingTall = TemplateLoadingTall.bind({});
+
+
+

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import FormatHelper from "../helpers/format-helper";
+import { LoadingMovieTile } from "@/components/loading-movie-tile";
 
 export const basicMovieTileStyles = `
     width: 410px;
@@ -75,10 +76,18 @@ export const basicMovieTileStyles = `
 const Container = styled.div`${basicMovieTileStyles}`;
 
 export type Props = Omit<Movie, "reviews"> & {
+    isLoading?: false;
     useFixedWidth?: boolean;
-};
+} | {
+    isLoading: true;
+}
 
 const MovieTile: React.FC<Props> = (props) => {
+    if (typeof props.isLoading === "undefined" || props.isLoading) {
+        console.log('123');
+        return <LoadingMovieTile type="default" />
+    }
+
     const ratColor = FormatHelper.getRatingColor(props.rating);
     let useFixedWidth = props.useFixedWidth ?? true;
 
@@ -100,5 +109,6 @@ const MovieTile: React.FC<Props> = (props) => {
         </Container>
     </Link>;
 }
+
 
 export default MovieTile;
