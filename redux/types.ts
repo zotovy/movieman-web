@@ -1,0 +1,3 @@
+export enum DiscoverTypes {
+    SET_MOVIES_FETCHED_BY_GENRE = "SET_MOVIES_FETCHED_BY_GENRE"
+}

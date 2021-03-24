@@ -13,6 +13,7 @@ export default class AuthHelper {
     }
 
     static get header() {
+        if (typeof window === "undefined") return "";
         return `Bearer ${AuthHelper.accessToken}`;
     }
 

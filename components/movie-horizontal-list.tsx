@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Carousel } from "react-responsive-carousel";
-import { useWindowWidth } from "@react-hook/window-size";
 import MovieTile from "./movie-tile";
 import "react-responsive-carousel/lib/styles/carousel.css";
+import TallMovieTile from "@/components/tall-movie-tile";
+import useWindowSize from "@/utils/hooks/useWindowSize";
+import useTouchDevice from "@/utils/hooks/useTouchDevice";
 
 const Container = styled.div`
     display: flex;
     width: 100%;
     overflow: hidden;
-    max-width: 1400px;
-    margin: 50px auto 0;
 
     .carousel-root {
         max-width: 100%;
@@ -36,6 +36,7 @@ const Container = styled.div`
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            user-select: none;
             
             img {
                 width: 20px;
@@ -57,62 +58,89 @@ const Container = styled.div`
         }
     }
     
+    .scroll-carousel {
+        margin-top: 10px;
+        width: 100%;
+        white-space: nowrap;
+        overflow-y: auto;
+        display: flex;
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .movie-component, .tall-movie-component {
+            flex: 0 0 auto;
+            margin-right: 30px;
+            padding: 10px;
+        }
+    }
 `;
 
-export type Props = {}
-
-const movie = {
-    genres: ["Драма"],
-    poster: "https://planetakino.ua/res/get-poster/00000000000000000000000000002169/am_cartaz.regular_30cm_BREVE.jpg",
-    title: "Маленькие женщины",
-    year: "2019",
-    rating: 7.7,
-    id: 12,
+export type Props = {
+    type?: "default" | "tall",
+    movies: Movie[],
 }
 
-const MovieHorizontalList: React.FC<Props> = (props) => {
 
-    let width = useWindowWidth();
-    width = width == 0 ? 1920 : width;
-    let centerPercentage = 100 / Math.floor((Math.min(1400, width) / 450));
-    // if (width < 1400) centerPercentage = 50;
-    // if (width < 768) centerPercentage = 100;
+const MovieHorizontalList: React.FC<Props> = (props) => {
+    const type: "default" | "tall" = props.type ?? "default";
+    let { width } = useWindowSize();
+    width = width ?? 1920;
+    const isTouchDevice = useTouchDevice();
+
+
+    const amountItemsOnOnePage = Math.floor((Math.min(1400, width) / (type === "default" ? 450 : 190)));
+    let centerPercentage = 100 / amountItemsOnOnePage;
+
+    const amountItemsOnSides = Math.floor(amountItemsOnOnePage / 2);
+    const [currentSelectedMovie, setCurrentSelectedMovie] = useState(amountItemsOnSides);
 
     return <Container>
-        <Carousel
-                showThumbs={false}
-                showIndicators={false}
-                showStatus={false}
-                swipeable={width <= 968}
-                emulateTouch={true}
-                swipeScrollTolerance={20}
-                centerMode={true}
-                centerSlidePercentage={centerPercentage}
-                renderArrowNext={NextArrow}
-                renderArrowPrev={PrevArrow}
-            >
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-            <MovieTile useFixedWidth={false} {...movie} />
-        </Carousel>
+        {
+            ((isTouchDevice || width <= 968) && type === "tall") || (centerPercentage < 100 && centerPercentage > 34 && type == "default")
+                    ? <div className="scroll-carousel">
+                        {
+                            props.movies.map(movie => {
+                                if (type === "default") return <MovieTile {...movie} />;
+                                return <TallMovieTile {...movie} />
+                            })
+                        }
+                    </div>
+                    : <Carousel
+                            onChange={(i) => setCurrentSelectedMovie(i)}
+                            selectedItem={currentSelectedMovie}
+                            showThumbs={false}
+                            showIndicators={false}
+                            showStatus={false}
+                            swipeScrollTolerance={type === "default" ? 100 : 30}
+                            centerMode={true}
+                            centerSlidePercentage={centerPercentage}
+                            renderArrowNext={(clickHandler) => NextArrow(currentSelectedMovie, amountItemsOnSides, clickHandler)}
+                            renderArrowPrev={(clickHandler) => PrevArrow(currentSelectedMovie, amountItemsOnSides, clickHandler)}
+                    >
+                        {
+                            props.movies.map(movie => {
+                                if (type === "default") return <MovieTile useFixedWidth={false} {...movie} />;
+                                return <TallMovieTile {...movie} />
+                            })
+                        }
+                    </Carousel>
+
+        }
     </Container>
 }
 
-const NextArrow = (clickHandler: () => void, hasNext: boolean): React.ReactNode => {
-    if (!hasNext) return <React.Fragment/>;
+const NextArrow = (i: number, amountItemsOnSides: number,  clickHandler: () => void): React.ReactNode => {
+    if (i === 19 - amountItemsOnSides) return <React.Fragment/>;
     return <div className="arrow-next" onClick={clickHandler}>
         <img src="/icons/arrow-right.png" alt="right"  />
     </div>
 }
 
-const PrevArrow = (clickHandler: () => void, hasNext: boolean): React.ReactNode => {
-    if (!hasNext) return <React.Fragment/>;
+const PrevArrow = (i: number, amountItemsOnSides: number, clickHandler: () => void): React.ReactNode => {
+    // if (i === 0) clickHandler();
+    if (i <= amountItemsOnSides) return <React.Fragment/>;
     return <div className="arrow-prev" onClick={clickHandler}>
         <img src="/icons/arrow-right.png" alt="right"  />
     </div>

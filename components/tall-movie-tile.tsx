@@ -7,35 +7,43 @@ export type Props = MovieTileProps;
 
 const Container = styled.div`
     ${basicMovieTileStyles};
-    height: 320px;
+    min-height: 320px;
     width: 183px;
-    
+
     .poster {
         width: 182px;
         height: 270px;
     }
-    
+
     .title {
         height: auto;
         margin-bottom: 5px;
-        
+
         h4 {
             font-size: 16px;
             margin-bottom: 0;
+            text-align: left;
         }
     }
-    
+
     .subtitle span {
         font-size: 13px;
     }
+    
 `;
 
 const TallMovieTile: React.FC<Props> = (props) => {
+
+    let title = props.title;
+    if (title.length > 45) {
+        title = props.title.substr(0, 40) + "...";
+    }
+
     return <Link href={`/movie/${props.id}`}>
-        <Container className="tall-movie-component" data-testid="tmt-container" >
+        <Container className="tall-movie-component" data-testid="tmt-container">
             <div className="poster" style={{ backgroundImage: `url(${props.poster})`, }} data-testid="tmt-poster"/>
             <div className="title" data-testid="tmt-title">
-                <h4>{props.title}</h4>
+                <h4>{title}</h4>
             </div>
             <div className="subtitle">
                 <span className="year" data-testid="tmt-year">{props.year}</span>

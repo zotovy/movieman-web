@@ -26,7 +26,7 @@ const Container = styled.div`
 `;
 
 export type Props = {
-    onClick?: () => {};
+    onClick?: () => any;
     selected?: boolean;
 }
 
@@ -35,7 +35,7 @@ const CategoryItem: React.FC<Props> = (props) => {
 
     return <Container
             onClick={props.onClick}
-            className={selected ? "selected" : "disabled"}
+            className={"category-item " + (selected ? "selected" : "disabled")}
             data-testid="category">
         { props.children }
     </Container>

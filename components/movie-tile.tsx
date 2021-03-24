@@ -62,7 +62,13 @@ export const basicMovieTileStyles = `
     }
 
     @media screen and (max-width: 960px) {
-        width: 100%;
+        &:not(.tall-movie-component) {
+            width: 100%;
+       
+            .poster {
+                height: 420px;
+            }
+        }
     }
 `;
 
