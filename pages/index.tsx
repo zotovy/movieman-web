@@ -6,6 +6,9 @@ import MovieHorizontalList from "../components/movie-horizontal-list";
 import MovieService from "../services/movie-service";
 import TitleComponent from "@/components/title";
 import CategoryItem from "@/components/category-item";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMoviesByGenreAction, setMoviesFetchedByGenre } from "@/redux/actions/discover-action";
+import { State } from "@/redux/reducers/root";
 
 const Page = styled.main`
     max-width: 1400px;
@@ -39,12 +42,29 @@ const Page = styled.main`
 
 type Props = {
     popularMovies: Movie[];
+    genreMovies: Movie[];
 }
 
 const usedGenres: MovieGenre[] = ["Fantasy", "Crime", "Adventure", "Family", "Comedy", "Western", "Science Fiction", "Thriller"]
 
 const HomePage: NextPage<Props> = (props) => {
     const [selectedGenre, setSelectedGenre] = useState<MovieGenre>(usedGenres[0]);
+    const dispatch = useDispatch();
+    let genreMovies = useSelector<State, Movie[]>(state => state.discoverReducer.moviesFetchedByGenre[selectedGenre]);
+    if (genreMovies.length === 0) genreMovies = props.genreMovies;
+
+    useEffect(() => {
+        dispatch(setMoviesFetchedByGenre({
+            movies: props.genreMovies,
+            genre: usedGenres[0],
+        }));
+    }, []);
+
+    useEffect(() => {
+        if (selectedGenre === usedGenres[0]) return;
+        dispatch(fetchMoviesByGenreAction(selectedGenre));
+    }, [selectedGenre]);
+
     return <React.Fragment>
         <MenuComponent/>
         <Page className="home-page">
@@ -61,7 +81,7 @@ const HomePage: NextPage<Props> = (props) => {
                 }
             </div>
 
-            <MovieHorizontalList type="tall" movies={props.popularMovies} />
+            <MovieHorizontalList type="tall" movies={genreMovies} />
         </Page>
     </React.Fragment>
 }
@@ -70,6 +90,7 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     return {
         props: {
             popularMovies: await MovieService.fetchPopularMovies(),
+            genreMovies: await MovieService.fetchMoviesByGenre(usedGenres[0]),
         }
     }
 }

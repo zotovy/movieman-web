@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { AnyAction } from "redux";
-import { State } from "@/redux/reducers/discover-reducer";
+import { State } from "@/redux/reducers/root";
 import MovieService from "../../services/movie-service";
 import { createAction } from "@reduxjs/toolkit";
 import { DiscoverTypes } from "@/redux/types";
@@ -13,9 +13,12 @@ export const setMoviesFetchedByGenre =
 
 // ---------- Async actions ----------
 
-export function fetchMoviesByGenreAction(genre: string): DiscoverThunkAction<void> {
-    return async (dispatch) => {
-        const movies = await MovieService.fetchMoviesByGenre(genre);
+export function fetchMoviesByGenreAction(genre: MovieGenre): DiscoverThunkAction<void> {
+    return async (dispatch, getState) => {
+        const { discoverReducer } = getState();
+        const movies = discoverReducer.moviesFetchedByGenre[genre].length === 0
+          ? await MovieService.fetchMoviesByGenre(genre)
+          : discoverReducer.moviesFetchedByGenre[genre];
         dispatch(setMoviesFetchedByGenre({
             movies,
             genre: genre as MovieGenre,
