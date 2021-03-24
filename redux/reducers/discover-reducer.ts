@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { setMoviesFetchedByGenre } from "@/redux/actions/discover-action";
+import { setIsGenresMoviesLoading, setMoviesFetchedByGenre } from "@/redux/actions/discover-action";
 
 export type State = {
     moviesFetchedByGenre: {
@@ -23,6 +23,7 @@ export type State = {
         War: Movie[]
         Western: Movie[],
     },
+    isGenresMoviesLoading: boolean,
 }
 
 export const InitialState: State = {
@@ -47,6 +48,7 @@ export const InitialState: State = {
         War: [],
         Western: [],
     },
+    isGenresMoviesLoading: false,
 }
 
 const reducer = (state: State = InitialState, action: AnyAction): State => {
@@ -54,6 +56,12 @@ const reducer = (state: State = InitialState, action: AnyAction): State => {
         state.moviesFetchedByGenre[action.payload.genre] = action.payload.movies;
         return {
             ...state,
+        }
+    }
+    if (setIsGenresMoviesLoading.match(action)) {
+        return  {
+            ...state,
+            isGenresMoviesLoading: action.payload,
         }
     }
 

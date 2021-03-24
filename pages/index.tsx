@@ -15,10 +15,12 @@ const Page = styled.main`
     margin: 50px auto 0;
     
     h2 {
+        padding: 0 10px;
         margin-top: 50px;
     }
     
     .genre-container {
+        padding: 0 10px;
         margin-top: 15px;
         height: 28px;
         display: block;
@@ -36,7 +38,7 @@ const Page = styled.main`
     }
     
     @media screen and (max-width: 1400px) {
-        padding: 0 20px;
+        
     }
 `;
 
@@ -52,6 +54,7 @@ const HomePage: NextPage<Props> = (props) => {
     const dispatch = useDispatch();
     let genreMovies = useSelector<State, Movie[]>(state => state.discoverReducer.moviesFetchedByGenre[selectedGenre]);
     if (genreMovies.length === 0) genreMovies = props.genreMovies;
+    const isLoading = useSelector<State, boolean>(state => state.discoverReducer.isGenresMoviesLoading);
 
     useEffect(() => {
         dispatch(setMoviesFetchedByGenre({
@@ -81,7 +84,7 @@ const HomePage: NextPage<Props> = (props) => {
                 }
             </div>
 
-            <MovieHorizontalList type="tall" movies={genreMovies} />
+            <MovieHorizontalList loading={isLoading} type="tall" movies={genreMovies} />
         </Page>
     </React.Fragment>
 }

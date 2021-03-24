@@ -83,8 +83,7 @@ export type Props = Omit<Movie, "reviews"> & {
 }
 
 const MovieTile: React.FC<Props> = (props) => {
-    if (typeof props.isLoading === "undefined" || props.isLoading) {
-        console.log('123');
+    if (typeof props.isLoading !== "undefined" || props.isLoading) {
         return <LoadingMovieTile type="default" />
     }
 

@@ -78,6 +78,7 @@ const Container = styled.div`
 `;
 
 export type Props = {
+    loading?: boolean,
     type?: "default" | "tall",
     movies: Movie[],
 }
@@ -102,8 +103,8 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
                     ? <div className="scroll-carousel">
                         {
                             props.movies.map(movie => {
-                                if (type === "default") return <MovieTile {...movie} />;
-                                return <TallMovieTile {...movie} />
+                                if (type === "default") return <MovieTile isLoading={props.loading} {...movie} />;
+                                return <TallMovieTile isLoading={props.loading} {...movie} />
                             })
                         }
                     </div>
@@ -121,8 +122,8 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
                     >
                         {
                             props.movies.map(movie => {
-                                if (type === "default") return <MovieTile useFixedWidth={false} {...movie} />;
-                                return <TallMovieTile {...movie} />
+                                if (type === "default") return <MovieTile isLoading={props.loading} useFixedWidth={false} {...movie} />;
+                                return <TallMovieTile isLoading={props.loading} {...movie} />
                             })
                         }
                     </Carousel>

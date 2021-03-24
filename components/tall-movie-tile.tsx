@@ -34,7 +34,7 @@ const Container = styled.div`
 `;
 
 const TallMovieTile: React.FC<Props> = (props) => {
-    if (typeof props.isLoading === "undefined" || props.isLoading) return <LoadingMovieTile type="tall" />
+    if (props.isLoading) return <LoadingMovieTile type="tall" />
 
     let title = props.title;
     if (title.length > 45) {

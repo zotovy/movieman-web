@@ -3,10 +3,10 @@ import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
 
 const LoadingContainer = styled.div`
-    width: 410px;
-    height: 290px;
+    cursor: pointer;
     display: flex;
     flex-direction: column; 
+    align-items: start;
     
     .poster {
         border-radius: 20px;
