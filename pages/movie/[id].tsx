@@ -1,0 +1,202 @@
+import React from "react";
+import { GetServerSideProps, NextPage } from "next";
+import styled from "styled-components";
+import MenuComponent from "@/components/menu";
+import FormatHelper from "@/helpers/format-helper";
+import Button from "@/components/button";
+import TitleComponent from "@/components/title";
+import ReviewComponent from "@/components/review";
+
+const Page = styled.main`
+    width: 100%;
+    height: calc(100vh - 75px);
+
+    ::-webkit-scrollbar-track {
+        background: red;
+    }
+
+    img.poster {
+        margin: 30px auto 0;
+        width: 100%;
+        //max-height: calc(100vh - 75px);
+    }
+
+
+    section {
+        margin: 0 auto;
+        max-width: 1400px;
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    section.information {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+
+        .info {
+            h1 {
+                font-weight: bold;
+                font-size: 36px;
+                line-height: 43px;
+                color: ${props => props.theme.colors.text};
+            }
+
+            p.detail-info {
+                margin-top: 10px;
+
+                span {
+                    font-weight: normal;
+                    margin-right: 20px;
+                    color: ${props => props.theme.colors.textSecondary};
+
+                    &.rating {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        .buttons {
+            display: flex;
+            align-items: center;
+
+            button.primary {
+                margin-right: 30px;
+            }
+        }
+    }
+
+    section.reviews {
+        margin-top: 60px;
+        padding-bottom: 100px;
+        width: 100%;
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            span.write-review {
+                font-size: 18px;
+                line-height: 22px;
+                color: ${props => props.theme.colors.primary};
+                cursor: pointer;
+
+                &:hover {
+                    color: #5970da;
+                }
+            }
+        }
+
+        .review-grid {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 50px;
+            grid-row-gap: 50px;
+        }
+    }
+`;
+
+type Props = {
+    movie?: {
+        genres: string[],
+        poster: string,
+        title: string,
+        year: string,
+        rating: number,
+        id: number,
+        kpId: number,
+        reviews: {
+            rating: number,
+            content: string,
+            author: User | { name: string, profileImagePath?: string },
+            comments: ReviewComment[],
+            createdAt: Date | any,
+            id: number,
+            movie: number,
+        }[],
+    },
+}
+
+const MovieDetailPage: NextPage<Props> = ({ movie }) => {
+    if (!movie) return <h1>404</h1>;
+
+    movie.reviews.forEach((x, i) => {
+        movie.reviews[i].createdAt = new Date(x.createdAt);
+    })
+    const ratingColor = FormatHelper.getRatingColor(movie.rating);
+
+    return <React.Fragment>
+        <MenuComponent/>
+        <Page className="movie-detail-page">
+            <img src={movie.poster} alt={movie.title} className="poster"/>
+
+            <section className="information">
+                <div className="info">
+                    <h1>{movie.title}</h1>
+                    <p className="detail-info">
+                        <span className="rating" style={{ color: ratingColor }}>{movie.rating}</span>
+                        <span className="genres">{movie.genres.slice(0, 3).join(", ")}</span>
+                        <span className="year">{movie.year}</span>
+                    </p>
+                </div>
+                <div className="buttons">
+                    <Button
+                            onClick={() => window.open(`https://www.ivi.ru/search/?q=${movie.title}`)}>
+                        Смотреть на ivi.ru
+                    </Button>
+                    <Button type="secondary">Оставить отзыв</Button>
+                </div>
+            </section>
+
+            <section className="reviews">
+                <div className="header">
+                    <TitleComponent>Отзывы Пользователей</TitleComponent>
+                    <span className="write-review">Написать отзыв</span>
+                </div>
+                <div className="review-grid">
+                    {
+                        movie.reviews.map(review => <ReviewComponent
+                                {...review}
+                                user={review.author}
+                        />)
+                    }
+                </div>
+            </section>
+        </Page>
+    </React.Fragment>;
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    return {
+        props: {
+            movie: {
+                genres: ["Драма", "Комедия"],
+                poster: "https://planetakino.ua/res/get-poster/00000000000000000000000000002169/am_cartaz.regular_30cm_BREVE.jpg",
+                title: "Маленькие женщины",
+                year: "2019",
+                rating: 7.7,
+                id: 12,
+                kpId: 123,
+                reviews: [
+                    {
+                        rating: 5,
+                        content: "Прекрасный фильм! Ничего лучше не смотрел за последние несколько лет. Тарантино – гений!",
+                        author: {
+                            name: "Денис Караев"
+                        },
+                        comments: [],
+                        createdAt: new Date().toISOString(),
+                        id: 123,
+                        movie: 123,
+                    }
+                ],
+            },
+        }
+    }
+}
+
+
+export default MovieDetailPage;

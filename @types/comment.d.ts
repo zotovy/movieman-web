@@ -1,6 +1,6 @@
 declare type ReviewComment = {
     id: number;
-    author: Ref<User>;
+    author: User | number;
     content: string;
     createdAt: Date;
 }

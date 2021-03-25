@@ -3,7 +3,6 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 import "../styles/globals.css";
 
 import ReviewComponent, { Props } from "../components/review";
-import Ref from "@/utils/ref";
 
 export default {
     title: 'Components/Review',
@@ -19,7 +18,7 @@ export type StoryProps = Omit<Props, "comments"> & {
 
 const defaultComment: ReviewComment = {
     id: 123,
-    author: new Ref<User>(123),
+    author: 123,
     content: "cool!",
     createdAt: new Date(),
 };
