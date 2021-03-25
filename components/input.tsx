@@ -35,6 +35,7 @@ const Component = styled.input`
 
 const Container = styled.div`
     position: relative;
+    width: 100%;
     
     img {
         height: 20px;
@@ -51,7 +52,7 @@ const Input: React.FC<Props> = (props) => {
     if (props.type === "password") {
         const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
-        return <Container>
+        return <Container className={props.className + " input-component"}>
             <Component  {...props} type={isPasswordHidden ? "password" : ""} />
             {
                 <img src={isPasswordHidden ? "/icons/closed-eye.png" : "/icons/open-eye.png"} alt="" onClick={() => setIsPasswordHidden(!isPasswordHidden)}/>
@@ -59,7 +60,7 @@ const Input: React.FC<Props> = (props) => {
         </Container>
     }
 
-    return <Component {...props} />
+    return <Component {...props} className={props.className + " input-component"} />
 }
 
 export default Input;
