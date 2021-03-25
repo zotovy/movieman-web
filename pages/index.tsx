@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NextPage, GetStaticProps } from "next";
+import { NextPage, GetStaticProps, GetServerSideProps } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import MenuComponent from "../components/menu";
@@ -92,7 +92,9 @@ const HomePage: NextPage<Props> = (props) => {
     </React.Fragment>
 }
 
-export const getStaticProps: GetStaticProps<Props> = async (context) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    console.log(context.req.headers.cookie);
+
     return {
         props: {
             popularMovies: await MovieService.fetchPopularMovies(),

@@ -26,7 +26,23 @@ h1, h2, h3, h4, h5, h6, p, span {
     --borderColor: #27283C;
 }
 
-/*.react-loading-skeleton {*/
-/*    background-size: 300px 100% !important;*/
-/*    background-image: linear-gradient( -45deg,#171A36,#191d37,#171A36 ) !important;*/
-/*}*/
+/** react-toastify styles  **/
+.Toastify__toast--error {
+    background-color: #171A36 !important;
+    border: 1px solid #27283C;
+    color: white;
+    border-radius: 10px !important;
+    font-weight: normal !important;
+    font-size: 18px !important;
+    text-align: center !important;
+}
+
+@media screen and (max-width: 480px) {
+    .Toastify__toast--error {
+        border-radius: 10px 10px 0 0 !important;
+    }
+}
+
+.Toastify__toast--error .Toastify__toast-body {
+    width: 100%;
+}

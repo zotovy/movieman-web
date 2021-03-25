@@ -14,11 +14,9 @@ const interceptor = client.interceptors.response.use(
   res => res,
   error => {
 
-      console.log(error);
-
       // Reject promise if usual error
       if (error.response.status !== 401) {
-          return Promise.reject(error);
+          return error.response;
       }
 
       /*
@@ -27,6 +25,12 @@ const interceptor = client.interceptors.response.use(
        * token refresh causes the 401 response
        */
       axios.interceptors.response.eject(interceptor);
+
+      axios.interceptors.response.use(response => {
+          return response;
+      }, error => {
+          return error.response;
+      });
 
       return axios.post(ApiRoutes.updateToken, AuthHelper.tokensBody)
         .then(res => {
@@ -37,7 +41,7 @@ const interceptor = client.interceptors.response.use(
         })
         .catch(err => {
             AuthHelper.destroyTokens();
-            return Promise.reject(error);
+            return error.response;
         });
   }
 );

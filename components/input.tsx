@@ -89,7 +89,7 @@ const Input: React.FC<Props> = (props) => {
     }
 
     return <Container className={props.className + " input-component " + (props.error ? "error" : "")} >
-        <Component {...props}/>
+        <Component {...props} onChange={props.onChange} />
         <div className="error-label">{ props.error }</div>
     </Container>
 }
