@@ -7,5 +7,5 @@ declare type User = {
     email: string;
     password: string;
     createdAt: Date;
-    profileImagePath: string;
+    profileImagePath?: string;
 }

@@ -1,4 +1,6 @@
-declare type Ref<T> = {
-    id: string;
-    T?: model;
+declare interface Ref<T> {
+    id: number;
+    model?: T;
+
+    isPopulated: () => boolean;
 }

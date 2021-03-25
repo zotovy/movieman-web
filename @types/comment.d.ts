@@ -1,4 +1,4 @@
-declare type Comment = {
+declare type ReviewComment = {
     id: number;
     author: Ref<User>;
     content: string;

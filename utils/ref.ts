@@ -1,4 +1,4 @@
-export default class Ref<T> implements IRef<T>{
+export default class Ref<T> implements Ref<T>{
     id: number;
     model?: T;
 
@@ -11,11 +11,4 @@ export default class Ref<T> implements IRef<T>{
         return false;
     }
 
-}
-
-export interface IRef<T> {
-    id: number;
-    model?: T;
-
-    isPopulated: () => boolean;
 }

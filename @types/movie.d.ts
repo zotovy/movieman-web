@@ -1,7 +1,7 @@
 declare type Movie = {
     id: number;
     kpId: number;
-    reviews: Ref<any>[],
+    reviews: Ref<ReviewComment>[],
     poster: string;
     genres: string[];
     rating: number;
