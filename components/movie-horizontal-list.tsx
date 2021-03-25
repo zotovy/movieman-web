@@ -122,7 +122,7 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
                     >
                         {
                             props.movies.map(movie => {
-                                if (type === "default") return <MovieTile isLoading={props.loading} useFixedWidth={false} {...movie} />;
+                                if (type === "default") return <MovieTile isLoading={props.loading} useFixedWidth={false} {...movie} />
                                 return <TallMovieTile isLoading={props.loading} {...movie} />
                             })
                         }

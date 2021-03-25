@@ -1,11 +1,13 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import MenuComponent from "@/components/menu";
 import FormatHelper from "@/helpers/format-helper";
 import Button from "@/components/button";
 import TitleComponent from "@/components/title";
 import ReviewComponent from "@/components/review";
+import FadeInWhenVisible from "@/components/utils/animate-when-visible";
 
 const Page = styled.main`
     width: 100%;
@@ -18,9 +20,7 @@ const Page = styled.main`
     img.poster {
         margin: 30px auto 0;
         width: 100%;
-        //max-height: calc(100vh - 75px);
     }
-
 
     section {
         margin: 0 auto;
@@ -120,6 +120,23 @@ type Props = {
     },
 }
 
+// Animation
+const animation = {
+    text: {
+        from: {
+            y: 20,
+            opacity: 0,
+        },
+        to: {
+            y: 0,
+            opacity: 1,
+        },
+        transition: {
+            delay: 0.3,
+        }
+    }
+}
+
 const MovieDetailPage: NextPage<Props> = ({ movie }) => {
     if (!movie) return <h1>404</h1>;
 
@@ -131,24 +148,40 @@ const MovieDetailPage: NextPage<Props> = ({ movie }) => {
     return <React.Fragment>
         <MenuComponent/>
         <Page className="movie-detail-page">
-            <img src={movie.poster} alt={movie.title} className="poster"/>
+            <img
+                    src={movie.poster}
+                    alt={movie.title}
+                    className="poster"/>
 
             <section className="information">
                 <div className="info">
-                    <h1>{movie.title}</h1>
-                    <p className="detail-info">
+                    <motion.h1
+                            transition={{ delay: 0.2 }}
+                            initial={animation.text.from}
+                            animate={animation.text.to}>
+                        {movie.title}
+                    </motion.h1>
+                    <motion.p
+                            transition={{ delay: 0.25 }}
+                            initial={animation.text.from}
+                            animate={animation.text.to}
+                            className="detail-info">
                         <span className="rating" style={{ color: ratingColor }}>{movie.rating}</span>
                         <span className="genres">{movie.genres.slice(0, 3).join(", ")}</span>
                         <span className="year">{movie.year}</span>
-                    </p>
+                    </motion.p>
                 </div>
-                <div className="buttons">
+                <motion.div
+                        transition={{ delay: 0.2 }}
+                        initial={animation.text.from}
+                        animate={animation.text.to}
+                        className="buttons">
                     <Button
                             onClick={() => window.open(`https://www.ivi.ru/search/?q=${movie.title}`)}>
                         Смотреть на ivi.ru
                     </Button>
                     <Button type="secondary">Оставить отзыв</Button>
-                </div>
+                </motion.div>
             </section>
 
             <section className="reviews">
@@ -158,10 +191,13 @@ const MovieDetailPage: NextPage<Props> = ({ movie }) => {
                 </div>
                 <div className="review-grid">
                     {
-                        movie.reviews.map(review => <ReviewComponent
-                                {...review}
-                                user={review.author}
-                        />)
+                        movie.reviews.map(review => <FadeInWhenVisible>
+                                    <ReviewComponent
+                                            {...review}
+                                            user={review.author}
+                                    />
+                                </FadeInWhenVisible>
+                        )
                     }
                 </div>
             </section>

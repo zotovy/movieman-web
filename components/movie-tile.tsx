@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import FormatHelper from "../helpers/format-helper";
 import { LoadingMovieTile } from "@/components/loading-movie-tile";
 
@@ -90,7 +91,7 @@ const MovieTile: React.FC<Props> = (props) => {
     const ratColor = FormatHelper.getRatingColor(props.rating);
     let useFixedWidth = props.useFixedWidth ?? true;
 
-    return <Link href={`/movie/${props.id}`}>
+    return <Link href={`/movie/${props.id}`} passHref>
         <Container
                 className="movie-component"
                 style={{ width: useFixedWidth ? "420px" : "initial" }}
