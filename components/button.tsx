@@ -32,14 +32,14 @@ const Container = styled.button`
     }
 `;
 
-export type Props = {
-    onClick?: () => any,
+export type Props = React.ComponentPropsWithoutRef<'button'> & {
+    htmlType?: React.ComponentPropsWithoutRef<'button'>["type"];
     type?: "primary" | "secondary";
 }
 
 const Button: React.FC<Props> = (props) => {
     const type = props.type ?? "primary";
-    return <Container className={type} onClick={props.onClick}>
+    return <Container {...props} className={type} type={props.htmlType} >
         {
             props.children
         }
