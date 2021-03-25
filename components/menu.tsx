@@ -158,12 +158,14 @@ const Container = styled.menu`
     }
 `;
 
+
+
 const MenuComponent: React.FC = () => {
     const [isMobileSearchCollapsed, setIsMobileSearchCollapsed] = useState(true);
     const mobileSearchInput = useRef<HTMLInputElement>(null);
 
     return <Container>
-        <Link href="/">
+        <Link href="/" passHref>
             <a className="company">
                 <img src="/images/logo.png" alt="logo" className="logo"/>
                 <h3 className="movieman-title">Movieman</h3>

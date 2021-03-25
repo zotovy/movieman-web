@@ -9,4 +9,5 @@ export default class ApiRoutes {
     static updateToken = ApiRoutes.buildRoute("/user/reauthenticate");
     static getPopularMovies = ApiRoutes.buildRoute("/movies/popular");
     static getMoviesByGenre = (genre: string) => ApiRoutes.buildRoute(`/movies/get-by-genre/${genre}`);
+    static getMovie= (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}`);
 }

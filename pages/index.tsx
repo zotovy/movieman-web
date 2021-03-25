@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NextPage, GetStaticProps } from "next";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import MenuComponent from "../components/menu";
 import MovieHorizontalList from "../components/movie-horizontal-list";
 import MovieService from "../services/movie-service";
@@ -73,8 +74,10 @@ const HomePage: NextPage<Props> = (props) => {
         <Page className="home-page">
             <MovieHorizontalList movies={props.popularMovies} />
 
-            <TitleComponent>Поиск по категориям</TitleComponent>
-            <div className="genre-container">
+            <motion.div transition={{ delay: 0.75 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <TitleComponent>Поиск по категориям</TitleComponent>
+            </motion.div>
+            <motion.div transition={{ delay: 0.75 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="genre-container">
                 {
                     usedGenres.map(x => <CategoryItem
                             onClick={() => setSelectedGenre(x)}
@@ -82,7 +85,7 @@ const HomePage: NextPage<Props> = (props) => {
                         { x }
                     </CategoryItem>)
                 }
-            </div>
+            </motion.div>
 
             <MovieHorizontalList loading={isLoading} type="tall" movies={genreMovies} />
         </Page>

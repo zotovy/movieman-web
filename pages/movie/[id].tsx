@@ -2,12 +2,14 @@ import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import MenuComponent from "@/components/menu";
 import FormatHelper from "@/helpers/format-helper";
 import Button from "@/components/button";
 import TitleComponent from "@/components/title";
 import ReviewComponent from "@/components/review";
 import FadeInWhenVisible from "@/components/utils/animate-when-visible";
+import MovieService from "../../services/movie-service";
 
 const Page = styled.main`
     width: 100%;
@@ -137,6 +139,15 @@ const animation = {
     }
 }
 
+const pageVariants = {
+    initial: {
+        opacity: 0,
+    },
+    in: {
+        opacity: 1,
+    },
+}
+
 const MovieDetailPage: NextPage<Props> = ({ movie }) => {
     if (!movie) return <h1>404</h1>;
 
@@ -147,89 +158,76 @@ const MovieDetailPage: NextPage<Props> = ({ movie }) => {
 
     return <React.Fragment>
         <MenuComponent/>
-        <Page className="movie-detail-page">
-            <img
-                    src={movie.poster}
-                    alt={movie.title}
-                    className="poster"/>
+        <motion.div
+                key={typeof window !== "undefined" ? location.pathname : undefined}
+                initial="initial"
+                animate="in"
+                exit="exit"
+                variants={pageVariants}>
+            <Page className="movie-detail-page">
+                <img
+                        src={movie.poster}
+                        alt={movie.title}
+                        className="poster"/>
 
-            <section className="information">
-                <div className="info">
-                    <motion.h1
+
+                <section className="information">
+                    <div className="info">
+                        <motion.h1
+                                transition={{ delay: 0.2 }}
+                                initial={animation.text.from}
+                                animate={animation.text.to}>
+                            {movie.title}
+                        </motion.h1>
+                        <motion.p
+                                transition={{ delay: 0.25 }}
+                                initial={animation.text.from}
+                                animate={animation.text.to}
+                                className="detail-info">
+                            <span className="rating" style={{ color: ratingColor }}>{movie.rating}</span>
+                            <span className="genres">{movie.genres.slice(0, 3).join(", ")}</span>
+                            <span className="year">{movie.year}</span>
+                        </motion.p>
+                    </div>
+                    <motion.div
                             transition={{ delay: 0.2 }}
                             initial={animation.text.from}
-                            animate={animation.text.to}>
-                        {movie.title}
-                    </motion.h1>
-                    <motion.p
-                            transition={{ delay: 0.25 }}
-                            initial={animation.text.from}
                             animate={animation.text.to}
-                            className="detail-info">
-                        <span className="rating" style={{ color: ratingColor }}>{movie.rating}</span>
-                        <span className="genres">{movie.genres.slice(0, 3).join(", ")}</span>
-                        <span className="year">{movie.year}</span>
-                    </motion.p>
-                </div>
-                <motion.div
-                        transition={{ delay: 0.2 }}
-                        initial={animation.text.from}
-                        animate={animation.text.to}
-                        className="buttons">
-                    <Button
-                            onClick={() => window.open(`https://www.ivi.ru/search/?q=${movie.title}`)}>
-                        Смотреть на ivi.ru
-                    </Button>
-                    <Button type="secondary">Оставить отзыв</Button>
-                </motion.div>
-            </section>
+                            className="buttons">
+                        <Button
+                                onClick={() => window.open(`https://www.kinopoisk.ru/index.php?kp_query=${movie.title}`)}>
+                            Найти на Кинопоиске
+                        </Button>
+                        <Button type="secondary">Оставить отзыв</Button>
+                    </motion.div>
+                </section>
 
-            <section className="reviews">
-                <div className="header">
-                    <TitleComponent>Отзывы Пользователей</TitleComponent>
-                    <span className="write-review">Написать отзыв</span>
-                </div>
-                <div className="review-grid">
-                    {
-                        movie.reviews.map(review => <FadeInWhenVisible>
-                                    <ReviewComponent
-                                            {...review}
-                                            user={review.author}
-                                    />
-                                </FadeInWhenVisible>
-                        )
-                    }
-                </div>
-            </section>
-        </Page>
+                <section className="reviews">
+                    <div className="header">
+                        <TitleComponent>Отзывы Пользователей</TitleComponent>
+                        <span className="write-review">Написать отзыв</span>
+                    </div>
+                    <div className="review-grid">
+                        {
+                            movie.reviews.map(review => <FadeInWhenVisible>
+                                        <ReviewComponent
+                                                {...review}
+                                                user={review.author}
+                                        />
+                                    </FadeInWhenVisible>
+                            )
+                        }
+                    </div>
+                </section>
+            </Page>
+        </motion.div>
     </React.Fragment>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     return {
         props: {
-            movie: {
-                genres: ["Драма", "Комедия"],
-                poster: "https://planetakino.ua/res/get-poster/00000000000000000000000000002169/am_cartaz.regular_30cm_BREVE.jpg",
-                title: "Маленькие женщины",
-                year: "2019",
-                rating: 7.7,
-                id: 12,
-                kpId: 123,
-                reviews: [
-                    {
-                        rating: 5,
-                        content: "Прекрасный фильм! Ничего лучше не смотрел за последние несколько лет. Тарантино – гений!",
-                        author: {
-                            name: "Денис Караев"
-                        },
-                        comments: [],
-                        createdAt: new Date().toISOString(),
-                        id: 123,
-                        movie: 123,
-                    }
-                ],
-            },
+            movie: await MovieService.fetchMovie(context.params?.id as string ?? 1) as Props["movie"] | undefined,
         }
     }
 }

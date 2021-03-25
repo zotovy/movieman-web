@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Carousel } from "react-responsive-carousel";
+import { motion } from "framer-motion";
 import MovieTile from "./movie-tile";
-import "react-responsive-carousel/lib/styles/carousel.css";
 import TallMovieTile from "@/components/tall-movie-tile";
 import useWindowSize from "@/utils/hooks/useWindowSize";
 import useTouchDevice from "@/utils/hooks/useTouchDevice";
+import "react-responsive-carousel/lib/styles/carousel.css";
 
 const Container = styled.div`
     display: flex;
@@ -83,6 +84,20 @@ export type Props = {
     movies: Movie[],
 }
 
+const getTile = (i: number, loading: boolean | undefined, type: "default" | "tall", movie: Movie): React.ReactElement => {
+    if (type === "default") return <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.75 + i * 0.1 }} >
+        <MovieTile key={`movie-${movie.id}-${type}`} isLoading={loading} useFixedWidth={true} {...movie} />
+    </motion.div>
+    return <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75 + i * 0.075 }}>
+        <TallMovieTile key={`movie-${movie.id}-${type}`} isLoading={loading} {...movie} />
+    </motion.div>
+}
 
 const MovieHorizontalList: React.FC<Props> = (props) => {
     const type: "default" | "tall" = props.type ?? "default";
@@ -102,9 +117,8 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
             ((isTouchDevice || width <= 968) && type === "tall") || (centerPercentage < 100 && centerPercentage > 34 && type == "default")
                     ? <div className="scroll-carousel">
                         {
-                            props.movies.map(movie => {
-                                if (type === "default") return <MovieTile isLoading={props.loading} {...movie} />;
-                                return <TallMovieTile isLoading={props.loading} {...movie} />
+                            props.movies.map((movie, i) => {
+                                return getTile(i, props.loading, type, movie);
                             })
                         }
                     </div>
@@ -121,9 +135,8 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
                             renderArrowPrev={(clickHandler) => PrevArrow(currentSelectedMovie, amountItemsOnSides, clickHandler)}
                     >
                         {
-                            props.movies.map(movie => {
-                                if (type === "default") return <MovieTile isLoading={props.loading} useFixedWidth={false} {...movie} />
-                                return <TallMovieTile isLoading={props.loading} {...movie} />
+                            props.movies.map((movie, i) => {
+                                return getTile(i, props.loading, type, movie);
                             })
                         }
                     </Carousel>
