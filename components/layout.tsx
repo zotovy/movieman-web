@@ -28,13 +28,24 @@ const Layout = styled.main`
     form, button {
         width: 100%;
     }
+    
+    &.with-menu {
+        margin-top: 15px;
+        height: calc(100vh - 75px);
+    }
 `;
 
-const Component: React.FC = (props) => {
+type Props = {
+    withMenu?: boolean;
+}
+
+const Component: React.FC<Props> = (props) => {
+    const withMenu = (props.withMenu ?? false) ? "with-menu" : "";
+
     return <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}>
-        <Layout>
+        <Layout className={withMenu}>
             { props.children }
         </Layout>
     </motion.div>

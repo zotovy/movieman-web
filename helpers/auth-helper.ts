@@ -1,17 +1,29 @@
+import SSRHelper from "@/helpers/ssr-helper";
+import Cookies from 'universal-cookie';
+
+
 export default class AuthHelper {
 
     static get accessToken() {
-        return document.cookie.split(";").find(x => x.startsWith("access-token="))?.split("=")[1] as string;
-        // return localStorage.getItem("access-token");
+        const cookies = new Cookies();
+        return cookies.get("accessToken");
+        // return localStorage.getItem("accessToken");
     }
 
     static set tokens(data: TokensBody) {
-        // document.cookie = `access-token=${data.tokens.access}; refresh-token=${data.tokens.refresh}; uid=${data.id}`;
-        document.cookie = `access-token=${data.tokens.access}`;
-        document.cookie = `refresh-token=${data.tokens.refresh}`;
-        document.cookie = `uid=${data.id}`;
-        // localStorage.setItem("access-token", data.tokens.access);
-        // localStorage.setItem("refresh-token", data.tokens.refresh);
+        const cookies = new Cookies();
+
+        if (typeof window === "undefined") return;
+        // document.cookie = `accessToken=${data.tokens.access}; refreshToken=${data.tokens.refresh}; uid=${data.id}`;
+        // document.cookie = `accessToken=${data.tokens.access}`;
+        // document.cookie = `refreshToken=${data.tokens.refresh}`;
+        // document.cookie = `uid=${data.id}`;
+        cookies.set('accessToken', data.tokens.access, {path: '/', expires: new Date(Date.now()+2592000)});
+        cookies.set('refreshToken', data.tokens.refresh, {path: '/', expires: new Date(Date.now()+2592000)});
+        cookies.set('uid', data.id, {path: '/', expires: new Date(Date.now()+2592000)});
+
+        // localStorage.setItem("accessToken", data.tokens.access);
+        // localStorage.setItem("refreshToken", data.tokens.refresh);
         // localStorage.setItem("uid", data.id);
     }
 
@@ -20,19 +32,23 @@ export default class AuthHelper {
         return `Bearer ${AuthHelper.accessToken}`;
     }
 
-    static get tokensBody(): TokensBody {
+    static get tokensBody() {
+        const cookies = SSRHelper.getCookiesClient();
+
+        console.log(cookies);
+
         return {
             tokens: {
-                access: localStorage.getItem("access-token") as string,
-                refresh: localStorage.getItem("refresh-token") as string,
+                access: cookies["accessToken"] as string,
+                refresh: cookies["refreshToken"] as string,
             },
-            id: localStorage.getItem("uid") as string,
+            uid: cookies["uid"] as string,
         }
     }
 
     static destroyTokens(): void {
-        localStorage.removeItem("access-token");
-        localStorage.removeItem("refresh-token");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         localStorage.removeItem("uid");
     }
 }

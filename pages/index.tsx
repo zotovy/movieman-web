@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMoviesByGenreAction, setMoviesFetchedByGenre } from "@/redux/actions/discover-action";
 import { State } from "@/redux/reducers/root";
 import UserService from "../services/user-service";
+import SSRHelper from "@/helpers/ssr-helper";
 
 const Page = styled.main`
     max-width: 1400px;
@@ -97,16 +98,7 @@ const HomePage: NextPage<Props> = (props) => {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    const cookies = cookie.parse(context.req.headers.cookie as string);
-    let user: User | null = null;
-
-
-
-    if (cookies.uid && parseInt(cookies.uid) && cookies["access-token"]) {
-        const id = parseInt(cookies.uid);
-        const res = await UserService.fetchUser(id, cookies["access-token"], cookies["refresh-token"]);
-        if (res !== "forbidden") user = res;
-    }
+    const user = await UserService.fetchUserServerSide(context);
 
     return {
         props: {

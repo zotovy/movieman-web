@@ -13,4 +13,6 @@ export default class ApiRoutes {
     static getMoviesByGenre = (genre: string) => ApiRoutes.buildRoute(`/movies/get-by-genre/${genre}`);
     static getMovie = (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}`);
     static getUser = (id: number | string) => ApiRoutes.buildRoute(`/user/${id}`);
+    static changeUserAvatar = (id: number | string) => ApiRoutes.buildRoute(`/user/${id}/change-profile-image`);
+    static userAvatar = (id: number | string) => `${ApiRoutes._baseRoute}/static/profile-image/${id}.jpg`
 }

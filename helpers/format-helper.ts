@@ -21,6 +21,5 @@ export default class FormatHelper {
             default:
                 return ending[2]
         }
-
     }
 }
