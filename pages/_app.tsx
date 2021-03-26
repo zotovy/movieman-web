@@ -3,6 +3,7 @@ import { AppProps } from "next/app";
 import { wrapper } from "@/redux/store";
 import { ThemeProvider } from "styled-components";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { CookiesProvider } from "react-cookie"
 import {  AnimateSharedLayout } from "framer-motion"
 import theme from "@/utils/theme";
 import EnvHelper from "@/helpers/env-helper";
@@ -15,7 +16,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps, router}) => {
     return <ThemeProvider theme={theme}>
         <AnimateSharedLayout>
             <SkeletonTheme color={theme.colors.lightBg} highlightColor={theme.colors.skeletonHighlight}>
-                <Component {...pageProps} key={router.route} />
+                <CookiesProvider>
+                    <Component {...pageProps} key={router.route} />
+                </CookiesProvider>
             </SkeletonTheme>
         </AnimateSharedLayout>
     </ThemeProvider>

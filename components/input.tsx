@@ -71,6 +71,7 @@ const Container = styled.div`
 export type Props = React.ComponentPropsWithoutRef<'input'> & {
     needPasswordHiddenButton?: boolean;
     error?: string;
+    ref?: any;
 };
 
 const Input: React.FC<Props> = (props) => {
@@ -89,7 +90,7 @@ const Input: React.FC<Props> = (props) => {
     }
 
     return <Container className={props.className + " input-component " + (props.error ? "error" : "")} >
-        <Component {...props} onChange={props.onChange} />
+        <Component {...props} />
         <div className="error-label">{ props.error }</div>
     </Container>
 }

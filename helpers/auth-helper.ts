@@ -3,13 +3,18 @@ import { local } from "store2";
 export default class AuthHelper {
 
     static get accessToken() {
-        return localStorage.getItem("access-token");
+        return document.cookie.split(";").find(x => x.startsWith("access-token="))?.split("=")[1] as string;
+        // return localStorage.getItem("access-token");
     }
 
     static set tokens(data: TokensBody) {
-        localStorage.setItem("access-token", data.tokens.access);
-        localStorage.setItem("refresh-token", data.tokens.refresh);
-        localStorage.setItem("uid", data.id);
+        // document.cookie = `access-token=${data.tokens.access}; refresh-token=${data.tokens.refresh}; uid=${data.id}`;
+        document.cookie = `access-token=${data.tokens.access}`;
+        document.cookie = `refresh-token=${data.tokens.refresh}`;
+        document.cookie = `uid=${data.id}`;
+        // localStorage.setItem("access-token", data.tokens.access);
+        // localStorage.setItem("refresh-token", data.tokens.refresh);
+        // localStorage.setItem("uid", data.id);
     }
 
     static get header() {

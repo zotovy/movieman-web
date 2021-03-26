@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { NextPage, GetStaticProps, GetServerSideProps } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import cookie from "cookie";
 import MenuComponent from "../components/menu";
 import MovieHorizontalList from "../components/movie-horizontal-list";
 import MovieService from "../services/movie-service";
@@ -93,7 +94,8 @@ const HomePage: NextPage<Props> = (props) => {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    console.log(context.req.headers.cookie);
+    const cookies = cookie.parse(context.req.headers.cookie as string);
+    console.log(cookies);
 
     return {
         props: {

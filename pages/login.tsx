@@ -10,10 +10,6 @@ import React from "react";
 import UserService from "../services/user-service";
 import ValidationHelper from "@/helpers/validation-helper";
 
-export type FormValues = {
-    email: string;
-    password: string;
-}
 
 const showToast = (status: string) => toast.error(
         status === "invalid_credentials"
