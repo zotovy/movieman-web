@@ -86,12 +86,14 @@ export type Props = {
 
 const getTile = (i: number, loading: boolean | undefined, type: "default" | "tall", movie: Movie): React.ReactElement => {
     if (type === "default") return <motion.div
+            key={`movie-${movie.id}-${type}`}
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.75 + i * 0.1 }} >
-        <MovieTile key={`movie-${movie.id}-${type}`} isLoading={loading} useFixedWidth={true} {...movie} />
+        <MovieTile  isLoading={loading} useFixedWidth={true} {...movie} />
     </motion.div>
     return <motion.div
+            key={`movie-${movie.id}-${type}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75 + i * 0.075 }}>

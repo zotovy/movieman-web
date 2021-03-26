@@ -81,6 +81,7 @@ const HomePage: NextPage<Props> = (props) => {
             <motion.div transition={{ delay: 0.75 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="genre-container">
                 {
                     usedGenres.map(x => <CategoryItem
+                            key={x}
                             onClick={() => setSelectedGenre(x)}
                             selected={selectedGenre === x}>
                         { x }
@@ -95,7 +96,6 @@ const HomePage: NextPage<Props> = (props) => {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const cookies = cookie.parse(context.req.headers.cookie as string);
-    console.log(cookies);
 
     return {
         props: {
