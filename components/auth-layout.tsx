@@ -1,6 +1,8 @@
+import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-export default styled.main`
+const Layout = styled.main`
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -27,3 +29,15 @@ export default styled.main`
         width: 100%;
     }
 `;
+
+const Component: React.FC = (props) => {
+    return <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}>
+        <Layout>
+            { props.children }
+        </Layout>
+    </motion.div>
+}
+
+export default Component;
