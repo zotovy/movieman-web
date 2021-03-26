@@ -1,5 +1,3 @@
-import { local } from "store2";
-
 export default class AuthHelper {
 
     static get accessToken() {

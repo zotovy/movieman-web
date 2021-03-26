@@ -1,3 +1,4 @@
+import axios, { AxiosResponse } from "axios";
 import client from "@/utils/api/client";
 import AuthHelper from "@/helpers/auth-helper";
 import ApiRoutes from "@/utils/api/routes";
@@ -29,6 +30,41 @@ export default class UserService {
         // save tokens
         AuthHelper.tokens = response.data;
         return "ok";
+    }
+
+    static async fetchUser(uid: number, accessToken?: string, refreshToken?: string): Promise<User | "forbidden"> {
+        let response: AxiosResponse | undefined;
+
+        // Used on server side where axios client haven't bearer token
+        if (accessToken) {
+            response = await axios.get(ApiRoutes.getUser(uid), {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            }).catch(e => e.response);
+
+            // if 401 --> trying get new tokens
+            if (!response || response.status === 401) {
+                response = await axios.post(ApiRoutes.updateToken, {
+                    uid,
+                    tokens: {
+                        access: accessToken,
+                        refresh: refreshToken,
+                    }
+                })
+                  .then(async res => {
+                      // Save tokens and trying to rerun action
+                      AuthHelper.tokens = res.data;
+                      return await axios.get(ApiRoutes.getUser(uid), {
+                          headers: { Authorization: `Bearer ${accessToken}` }
+                      }).catch(e => e.response);
+                  })
+                  .catch(err => err.response);
+            }
+        } else {
+            response = await client.get(ApiRoutes.getUser(uid));
+        }
+
+        if (!response || response.status === 401 || !response.data) return "forbidden";
+        return response.data;
     }
 }
 

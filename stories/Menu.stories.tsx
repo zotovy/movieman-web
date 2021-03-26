@@ -10,7 +10,7 @@ export default {
     component: MenuComponent,
 } as Meta;
 
-const Template: Story<{}> = (args) => <MenuComponent {...args} />;
+const Template: Story<{}> = (args) => <MenuComponent user={null} {...args} />;
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {

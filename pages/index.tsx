@@ -11,6 +11,7 @@ import CategoryItem from "@/components/category-item";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMoviesByGenreAction, setMoviesFetchedByGenre } from "@/redux/actions/discover-action";
 import { State } from "@/redux/reducers/root";
+import UserService from "../services/user-service";
 
 const Page = styled.main`
     max-width: 1400px;
@@ -47,6 +48,7 @@ const Page = styled.main`
 type Props = {
     popularMovies: Movie[];
     genreMovies: Movie[];
+    userData: User | { name: string, profileImagePath?: string } | null;
 }
 
 const usedGenres: MovieGenre[] = ["Fantasy", "Crime", "Adventure", "Family", "Comedy", "Western", "Science Fiction", "Thriller"]
@@ -71,7 +73,7 @@ const HomePage: NextPage<Props> = (props) => {
     }, [selectedGenre]);
 
     return <React.Fragment>
-        <MenuComponent/>
+        <MenuComponent user={props.userData} />
         <Page className="home-page">
             <MovieHorizontalList movies={props.popularMovies} />
 
@@ -96,9 +98,19 @@ const HomePage: NextPage<Props> = (props) => {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const cookies = cookie.parse(context.req.headers.cookie as string);
+    let user: User | null = null;
+
+
+
+    if (cookies.uid && parseInt(cookies.uid) && cookies["access-token"]) {
+        const id = parseInt(cookies.uid);
+        const res = await UserService.fetchUser(id, cookies["access-token"], cookies["refresh-token"]);
+        if (res !== "forbidden") user = res;
+    }
 
     return {
         props: {
+            userData: user,
             popularMovies: await MovieService.fetchPopularMovies(),
             genreMovies: await MovieService.fetchMoviesByGenre(usedGenres[0]),
         }

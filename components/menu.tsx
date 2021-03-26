@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
+import Button from "@/components/button";
 import Link from "next/link";
 
 const Container = styled.menu`
@@ -66,12 +67,16 @@ const Container = styled.menu`
         }
     }
 
-    .user-profile {
+    .user-profile, .auth-buttons {
         cursor: pointer;
         flex: 0 0 auto;
         margin-left: 72px;
         display: flex;
         align-items: center;
+        
+        button.secondary {
+            margin-right: 20px;
+        }
 
         .profile-image {
             width: 35px;
@@ -158,11 +163,18 @@ const Container = styled.menu`
     }
 `;
 
+type Props = {
+    user: User | {
+        name: string,
+        profileImagePath?: string;
+    } | null,
+};
 
-
-const MenuComponent: React.FC = () => {
+const MenuComponent: React.FC<Props> = (props) => {
     const [isMobileSearchCollapsed, setIsMobileSearchCollapsed] = useState(true);
     const mobileSearchInput = useRef<HTMLInputElement>(null);
+
+    const imagePath = props.user?.profileImagePath ?? "/images/user-avatar.png";
 
     return <Container>
         <Link href="/" passHref>
@@ -193,13 +205,26 @@ const MenuComponent: React.FC = () => {
             <img src="/icons/search.png" alt=""/>
         </div>
 
-        <Link href="/profile">
-            <div className="user-profile">
-                <div className="profile-image"
-                     style={{ backgroundImage: `url(https://i-cdn.phonearena.com/images/article/105457-two_lead/Google-pushes-out-June-security-patch-for-Pixel-and-some-Nexus-handsets.jpg)` }}/>
-                <span className="name">Yaroslav Zotov</span>
-            </div>
-        </Link>
+        {
+            props.user
+                    ? <Link href="/profile">
+                        <div className="user-profile">
+                            <div className="profile-image"
+                                 style={{ backgroundImage: `url(${imagePath})` }}/>
+                            <span className="name">{props.user.name}</span>
+                        </div>
+                    </Link>
+                    : <div className="auth-buttons">
+                        <Link href="/login">
+                            <Button size="small" type="secondary">Login</Button>
+                        </Link>
+                        <Link href="/signup">
+                            <Button size="small" type="primary">Signup</Button>
+                        </Link>
+                    </div>
+        }
+
+
     </Container>
 }
 

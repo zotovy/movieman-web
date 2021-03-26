@@ -15,6 +15,11 @@ const Container = styled.button`
         cursor: pointer;
     }
     
+    &.small {
+        font-size: 16px;
+        padding: 10px 25px;
+    }
+    
     &.primary {
         background-color: ${ props => props.theme.colors.primary };
         
@@ -32,14 +37,17 @@ const Container = styled.button`
     }
 `;
 
-export type Props = React.ComponentPropsWithoutRef<'button'> & {
+export type Props = Omit<React.ComponentPropsWithoutRef<'button'>, "type"> & {
     htmlType?: React.ComponentPropsWithoutRef<'button'>["type"];
     type?: "primary" | "secondary";
+    size?: "small" | "default-size"
 }
 
 const Button: React.FC<Props> = (props) => {
     const type = props.type ?? "primary";
-    return <Container {...props} className={type} type={props.htmlType} >
+    const size = props.size ?? "";
+
+    return <Container {...props} className={`${size} ${type}`} type={props.htmlType} >
         {
             props.children
         }

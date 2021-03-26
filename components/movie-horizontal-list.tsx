@@ -89,14 +89,14 @@ const getTile = (i: number, loading: boolean | undefined, type: "default" | "tal
             key={`movie-${movie.id}-${type}`}
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.75 + i * 0.1 }} >
+            transition={{ delay: i * 0.1 }} >
         <MovieTile  isLoading={loading} useFixedWidth={true} {...movie} />
     </motion.div>
     return <motion.div
             key={`movie-${movie.id}-${type}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75 + i * 0.075 }}>
+            transition={{ delay: i * 0.075 }}>
         <TallMovieTile key={`movie-${movie.id}-${type}`} isLoading={loading} {...movie} />
     </motion.div>
 }
