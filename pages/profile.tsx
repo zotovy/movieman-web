@@ -77,14 +77,20 @@ const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
     </form>
 }
 
+type FormProps = FormValues & { id: number };
 
-const Form = withFormik<FormValues, FormValues>({
+const Form = withFormik<FormProps, FormValues>({
     mapPropsToValues: (props) => ({
         email: props.email,
         name: props.name,
     }),
     handleSubmit: async (values, { props }) => {
-
+        const res = await UserService.updateUser(props.id, values);
+        if (res === "ok") return;
+        if (res === "invalid_error") return UiHelper.showToast("Invalid error happened");
+        if (res === "email_not_unique_error") return UiHelper.showToast("This email is already in used");
+        if (res === "email_format_error") return UiHelper.showToast("Email badly formatted");
+        if (res === "name_too_long") return UiHelper.showToast("Your name is too long");
     },
     validationSchema: ValidationHelper.validateProfileForm,
 })(InnerForm);
@@ -115,6 +121,7 @@ const ProfilePage: NextPage<Props> = (props) => {
                 <div className="overflow">Change image</div>
             </UserAvatar>
             <Form
+                    id={props.user.id}
                     email={props.user.email}
                     name={props.user.name}
             />

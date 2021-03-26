@@ -18,9 +18,14 @@ export default class AuthHelper {
         // document.cookie = `accessToken=${data.tokens.access}`;
         // document.cookie = `refreshToken=${data.tokens.refresh}`;
         // document.cookie = `uid=${data.id}`;
-        cookies.set('accessToken', data.tokens.access, {path: '/', expires: new Date(Date.now()+2592000)});
-        cookies.set('refreshToken', data.tokens.refresh, {path: '/', expires: new Date(Date.now()+2592000)});
-        cookies.set('uid', data.id, {path: '/', expires: new Date(Date.now()+2592000)});
+
+        const opts = {
+            expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60)),
+            httpOnly: false,
+        }
+        cookies.set('accessToken', data.tokens.access, opts);
+        cookies.set('refreshToken', data.tokens.refresh, opts);
+        cookies.set('uid', data.uid, opts);
 
         // localStorage.setItem("accessToken", data.tokens.access);
         // localStorage.setItem("refreshToken", data.tokens.refresh);
@@ -33,16 +38,14 @@ export default class AuthHelper {
     }
 
     static get tokensBody() {
-        const cookies = SSRHelper.getCookiesClient();
-
-        console.log(cookies);
+        const cookies = new Cookies();
 
         return {
             tokens: {
-                access: cookies["accessToken"] as string,
-                refresh: cookies["refreshToken"] as string,
+                access: cookies.get("accessToken") as string,
+                refresh: cookies.get("refreshToken") as string,
             },
-            uid: cookies["uid"] as string,
+            uid: cookies.get("uid") as string,
         }
     }
 
@@ -58,5 +61,5 @@ export type TokensBody = {
         access: string;
         refresh: string;
     },
-    id: string;
+    uid: string;
 }
