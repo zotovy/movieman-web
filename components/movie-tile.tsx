@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 import FormatHelper from "../helpers/format-helper";
 import { LoadingMovieTile } from "@/components/loading-movie-tile";
 
+
+// todo: use styled css
 export const basicMovieTileStyles = `
     width: 410px;
 
@@ -99,7 +100,7 @@ const MovieTile: React.FC<Props> = (props) => {
             <div className="poster" style={{ backgroundImage: `url(${props.poster})` }} data-testid="mt-poster"/>
             <div className="title" data-testid="mt-title">
                 <h4>{props.title}</h4>
-                <span className="rating" data-testid="mt-rating" style={{ color: ratColor }}>{props.rating}</span>
+                <span className="rating" data-testid="mt-rating" style={{ color: ratColor }}>{props.rating.toFixed(0)}</span>
             </div>
             <div className="subtitle">
                 <span className="year" data-testid="mt-year">{props.year}</span>
