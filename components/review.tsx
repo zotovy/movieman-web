@@ -99,7 +99,7 @@ export type Props = {
 const ReviewComponent: React.FC<Props> = (props) => {
     const image = `url(${props.user.profileImagePath ?? "/images/user-avatar.png"})`;
 
-    return <Container>
+    return <Container className="review-component">
         <div className="header">
             <div className="user">
                 <div className="user-avatar" style={{ backgroundImage: image }}/>
