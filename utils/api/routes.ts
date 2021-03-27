@@ -17,4 +17,5 @@ export default class ApiRoutes {
     static userAvatar = (id: number | string) => `${ApiRoutes._baseRoute}/static/profile-image/${id}.jpg`
     static updateUser = ApiRoutes.getUser;
     static writeReview = (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}/review`);
+    static getReviews = (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}/reviews`);
 }

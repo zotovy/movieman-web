@@ -186,7 +186,7 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
                                 initial={animation.text.from}
                                 animate={animation.text.to}
                                 className="detail-info">
-                            <span className="rating" style={{ color: ratingColor }}>{movie.rating}</span>
+                            <span className="rating" style={{ color: ratingColor }}>{ parseFloat(movie.rating.toFixed(1)) }</span>
                             <span className="genres">{movie.genres.slice(0, 3).join(", ")}</span>
                             <span className="year">{movie.year}</span>
                         </motion.p>
@@ -216,10 +216,14 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
                     <div className="review-grid">
                         {
                             movie.reviews.map(review => <FadeInWhenVisible key={`review-${review.id}`}>
-                                        <ReviewComponent
-                                                {...review}
-                                                user={review.author}
-                                        />
+                                       <Link href={`/movie/${movie.id}/review/${review.id}`}>
+                                           <a>
+                                               <ReviewComponent
+                                                       {...review}
+                                                       user={review.author}
+                                               />
+                                           </a>
+                                       </Link>
                                     </FadeInWhenVisible>
                             )
                         }

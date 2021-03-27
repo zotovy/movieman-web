@@ -38,6 +38,7 @@ const Container = styled.div`
         }
         
         p.content {
+            font-size: 18px;
             padding-top: 10px;
             line-height: 30px;
             letter-spacing: 0.04em;
@@ -57,7 +58,7 @@ export type Props = {
 const Comment: React.FC<Props> = (props) => {
     const profileImage = props.user.profileImagePath ?? "/images/user-avatar.png";
 
-    return <Container>
+    return <Container className="comment-component">
         <div className="left-side">
             <div className="avatar" style={{ backgroundImage: `url(${profileImage})` }} />
             <div className="stick"/>
