@@ -14,23 +14,31 @@ const Container = styled.button`
     &:hover {
         cursor: pointer;
     }
-    
+
     &.small {
         font-size: 16px;
         padding: 10px 25px;
     }
-    
+
     &.primary {
-        background-color: ${ props => props.theme.colors.primary };
-        
+        background-color: ${props => props.theme.colors.primary};
+
         &:hover {
             background-color: #546BD6;
         }
     }
-    
+
+    &:disabled {
+        background-color: #171A36;
+
+        &:hover {
+            background-color: #181c37;
+        }
+    }
+
     &.secondary {
-        background-color: ${ props => props.theme.colors.lightBg };
-        
+        background-color: ${props => props.theme.colors.lightBg};
+
         &:hover {
             background-color: #1B1F3E;
         }

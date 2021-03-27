@@ -49,7 +49,9 @@ const Page = styled.div`
 `;
 
 const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
+
     return <form onSubmit={(event) => {
+                console.log(props.values.rating);
                 props.handleSubmit(event);
                 if (props.values.rating === -1) UiHelper.showToast("Please, rate this film");
             }}>
@@ -62,8 +64,8 @@ const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
         <RatingPicker onChange={i => props.setFieldValue("rating", i)}/>
         <Button
                 htmlType="submit"
-                disabled={props.dirty}>
-            Создать отзыв
+                disabled={!(props.isValid && props.dirty)}>
+            Write review
         </Button>
     </form>
 }
