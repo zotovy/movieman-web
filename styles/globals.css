@@ -46,3 +46,7 @@ h1, h2, h3, h4, h5, h6, p, span {
 .Toastify__toast--error .Toastify__toast-body {
     width: 100%;
 }
+
+textarea {
+    font-family: inherit;
+}

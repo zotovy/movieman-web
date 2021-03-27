@@ -17,4 +17,9 @@ export default class ValidationHelper {
         name: Yup.string().required("Name is required").max(1024, "Name is too long").matches(ValidationHelper.NameValidator, "Invalid name"),
         email: Yup.string().required("Email is required").email("Email is invalid").max(1024, "Email is too long"),
     })
+
+    static validateWriteReview = Yup.object().shape({
+        review: Yup.string().required("Review is required").max(2048, "Review is too long"),
+        rating: Yup.number().required("Rating is required").min(1, "Rating is required").max(10, "Rating have to be less than 10"),
+    })
 }

@@ -2,14 +2,14 @@ import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import MenuComponent from "@/components/menu";
 import FormatHelper from "@/helpers/format-helper";
 import Button from "@/components/button";
 import TitleComponent from "@/components/title";
 import ReviewComponent from "@/components/review";
 import FadeInWhenVisible from "@/components/utils/animate-when-visible";
-import MovieService from "../../services/movie-service";
+import MovieService from "@/services/movie-service";
+import UserService from "@/services/user-service";
 
 const Page = styled.main`
     width: 100%;
@@ -120,6 +120,7 @@ type Props = {
             movie: number,
         }[],
     },
+    user: User | { name: string, profileImagePath?: string } | null;
 }
 
 // Animation
@@ -148,7 +149,7 @@ const pageVariants = {
     },
 }
 
-const MovieDetailPage: NextPage<Props> = ({ movie }) => {
+const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
     if (!movie) return <h1>404</h1>;
 
     movie.reviews.forEach((x, i) => {
@@ -157,7 +158,7 @@ const MovieDetailPage: NextPage<Props> = ({ movie }) => {
     const ratingColor = FormatHelper.getRatingColor(movie.rating);
 
     return <React.Fragment>
-        <MenuComponent/>
+        <MenuComponent user={user} />
         <motion.div
                 key={typeof window !== "undefined" ? location.pathname : undefined}
                 initial="initial"
@@ -209,7 +210,7 @@ const MovieDetailPage: NextPage<Props> = ({ movie }) => {
                     </div>
                     <div className="review-grid">
                         {
-                            movie.reviews.map(review => <FadeInWhenVisible>
+                            movie.reviews.map(review => <FadeInWhenVisible key={`review-${review.id}`}>
                                         <ReviewComponent
                                                 {...review}
                                                 user={review.author}
@@ -225,8 +226,11 @@ const MovieDetailPage: NextPage<Props> = ({ movie }) => {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    const user = await UserService.fetchUserServerSide(context);
+
     return {
         props: {
+            user,
             movie: await MovieService.fetchMovie(context.params?.id as string ?? 1) as Props["movie"] | undefined,
         }
     }

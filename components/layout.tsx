@@ -37,15 +37,17 @@ const Layout = styled.main`
 
 type Props = {
     withMenu?: boolean;
+    maxWidth?: string;
 }
 
 const Component: React.FC<Props> = (props) => {
     const withMenu = (props.withMenu ?? false) ? "with-menu" : "";
+    const maxWidth = props.maxWidth ?? "";
 
     return <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}>
-        <Layout className={withMenu}>
+        <Layout className={withMenu} style={{ maxWidth }}>
             { props.children }
         </Layout>
     </motion.div>

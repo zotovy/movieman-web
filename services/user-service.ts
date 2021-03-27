@@ -1,11 +1,10 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import Cookies from 'cookies'
 import client from "@/utils/api/client";
 import AuthHelper from "@/helpers/auth-helper";
 import ApiRoutes from "@/utils/api/routes";
 import { FormValues } from "../pages/signup";
 import { GetServerSidePropsContext } from "next";
-import SSRHelper from "@/helpers/ssr-helper";
 
 export default class UserService {
 
@@ -15,6 +14,8 @@ export default class UserService {
             if (response.status === 404) return "invalid_credentials";
             return "invalid_error";
         }
+
+        alert(JSON.stringify(response.data));
 
         // save tokens
         AuthHelper.tokens = response.data;
@@ -48,8 +49,6 @@ export default class UserService {
             headers: { Authorization: `Bearer ${cookies.get("accessToken") as string}` }
         }).catch(e => e.response);
 
-        console.log(response.status)
-
         // if 401 --> trying get new tokens
         if (!response || response.status === 401) {
             response = await axios.post(ApiRoutes.updateToken, {
@@ -63,6 +62,8 @@ export default class UserService {
                   const opts = {
                       expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60))
                   }
+
+                  console.error(res);
 
                   cookies.set("accessToken", res.data.tokens.access, opts);
                   cookies.set("refreshToken", res.data.tokens.refresh, opts);
@@ -112,7 +113,6 @@ export default class UserService {
             if (errors.find(x => x.path === "email")) return "email_format_error";
             return "invalid_error";
         }
-        console.log(response.data.error);
         if (response.data.error === "email-unique-error") return "email_not_unique_error";
         return "invalid_error";
     }

@@ -23,6 +23,9 @@ export default class AuthHelper {
             expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60)),
             httpOnly: false,
         }
+
+
+
         cookies.set('accessToken', data.tokens.access, opts);
         cookies.set('refreshToken', data.tokens.refresh, opts);
         cookies.set('uid', data.uid, opts);

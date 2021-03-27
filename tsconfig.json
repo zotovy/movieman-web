@@ -24,7 +24,8 @@
       "@/redux/*": [ "redux/*" ],
       "@/utils/*": [ "utils/*" ],
       "@/components/*": [ "components/*" ],
-      "@/helpers/*": [ "helpers/*" ]
+      "@/helpers/*": [ "helpers/*" ],
+      "@/services/*": [ "services/*" ]
     },
     "typeRoots": [
       ".",

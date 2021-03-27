@@ -106,7 +106,7 @@ const ReviewComponent: React.FC<Props> = (props) => {
             </div>
             <div className="rating">
                 <img src="/icons/star.png" alt="" className="star"/>
-                <span className="rating-value">{ props.rating.toFixed(1) } / 5.0</span>
+                <span className="rating-value">{ props.rating.toFixed(1) } / 10.0</span>
             </div>
         </div>
         <p className="content">
