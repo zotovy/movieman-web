@@ -6,7 +6,7 @@ const Container = styled.div`
     cursor: pointer;
     display: inline-block;
     width: 100%;
-    background-color: ${ props => props.theme.colors.lightBg };
+    background-color: ${props => props.theme.colors.lightBg};
     border-radius: 15px;
     padding: 15px;
     
@@ -31,7 +31,7 @@ const Container = styled.div`
             }
             
             span.name {
-                color: ${ props => props.theme.colors.text };
+                color: ${props => props.theme.colors.text};
                 font-weight: 500;
                 font-size: 18px;
                 line-height: 22px;
@@ -43,6 +43,7 @@ const Container = styled.div`
             align-items: center;
             
             img {
+                width: 28px;
                 margin-right: 10px;
             }
             
@@ -50,7 +51,7 @@ const Container = styled.div`
                 font-weight: bold;
                 font-size: 18px;
                 line-height: 22px;
-                color: ${ props => props.theme.colors.text };
+                color: ${props => props.theme.colors.text};
             }
         }
     }
@@ -63,7 +64,7 @@ const Container = styled.div`
         font-weight: 400;
         
         .more {
-            color: ${ props => props.theme.colors.primary };
+            color: ${props => props.theme.colors.primary};
         }
     }
     
@@ -80,7 +81,7 @@ const Container = styled.div`
             font-weight: normal;
             font-size: 16px;
             line-height: 19px;
-            color: ${ props => props.theme.colors.textDisabled };
+            color: ${props => props.theme.colors.textDisabled};
         }
     }
 `;
@@ -101,22 +102,22 @@ const ReviewComponent: React.FC<Props> = (props) => {
     return <Container>
         <div className="header">
             <div className="user">
-                <div className="user-avatar" style={{ backgroundImage: image }} />
-                <span className="name">{ props.user.name }</span>
+                <div className="user-avatar" style={{ backgroundImage: image }}/>
+                <span className="name">{props.user.name}</span>
             </div>
             <div className="rating">
                 <img src="/icons/star.png" alt="" className="star"/>
-                <span className="rating-value">{ props.rating.toFixed(1) } / 10.0</span>
+                <span className="rating-value">{props.rating.toFixed(1)} / 10.0</span>
             </div>
         </div>
         <p className="content">
             {
-            props.content.length > 116
-                    ? <React.Fragment>
-                        { props.content.substr(0, 105) + "..."}
-                        <span className="more"> ещё</span>
-                    </React.Fragment>
-                    : props.content
+                props.content.length > 116
+                        ? <React.Fragment>
+                            {props.content.substr(0, 105) + "..."}
+                            <span className="more"> ещё</span>
+                        </React.Fragment>
+                        : props.content
             }
         </p>
         <div className="comment">
@@ -124,8 +125,8 @@ const ReviewComponent: React.FC<Props> = (props) => {
             <span className="comment-amount">
                 {
                     props.comments.length > 0
-                        ? `${props.comments.length} ${FormatHelper.getNumEnding(props.comments.length, ["комментарий", "комментария", "комментариев"])}`
-                        : "Нет комментариев"
+                            ? `${props.comments.length} ${FormatHelper.getNumEnding(props.comments.length, ["комментарий", "комментария", "комментариев"])}`
+                            : "Нет комментариев"
                 }
             </span>
         </div>

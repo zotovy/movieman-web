@@ -60,14 +60,13 @@ export default class UserService {
             })
               .then(async res => {
                   const opts = {
-                      expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60))
+                      expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60)),
+                      httpOnly: false,
                   }
-
-                  console.error(res);
 
                   cookies.set("accessToken", res.data.tokens.access, opts);
                   cookies.set("refreshToken", res.data.tokens.refresh, opts);
-                  cookies.set("uid", res.data.tokens.uid, opts);
+                  cookies.set("uid", res.data.uid, opts);
 
                   return axios.get(ApiRoutes.getUser(cookies.get("uid") as string), {
                       headers: { Authorization: `Bearer ${res.data.tokens.access}` }

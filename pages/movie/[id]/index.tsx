@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link"
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
@@ -158,7 +159,7 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
     const ratingColor = FormatHelper.getRatingColor(movie.rating);
 
     return <React.Fragment>
-        <MenuComponent user={user} />
+        <MenuComponent user={user}/>
         <motion.div
                 key={typeof window !== "undefined" ? location.pathname : undefined}
                 initial="initial"
@@ -199,14 +200,18 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
                                 onClick={() => window.open(`https://www.kinopoisk.ru/index.php?kp_query=${movie.title}`)}>
                             Найти на Кинопоиске
                         </Button>
-                        <Button type="secondary">Оставить отзыв</Button>
+                        <Link href={`/movie/${movie.id}/review`}>
+                            <Button type="secondary">Оставить отзыв</Button>
+                        </Link>
                     </motion.div>
                 </section>
 
                 <section className="reviews">
                     <div className="header">
                         <TitleComponent>Отзывы Пользователей</TitleComponent>
-                        <span className="write-review">Написать отзыв</span>
+                        <Link href={`/movie/${movie.id}/review`}>
+                            <span className="write-review">Написать отзыв</span>
+                        </Link>
                     </div>
                     <div className="review-grid">
                         {

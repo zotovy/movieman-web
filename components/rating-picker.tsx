@@ -44,6 +44,7 @@ const RatingPicker: React.FC<Props> = (props) => {
         {
             new Array(10).fill(0).map((_, i) => {
                 return <div
+                        key={`star-${i}`}
                         onClick={() => {
                             if (props.onChange) props.onChange(i + 1);
                             setRating(i)

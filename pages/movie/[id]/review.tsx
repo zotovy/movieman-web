@@ -14,6 +14,8 @@ import ValidationHelper from "@/helpers/validation-helper";
 import RatingPicker from "@/components/rating-picker";
 import Button from "@/components/button";
 import 'react-toastify/dist/ReactToastify.css';
+import { withRouter } from "next/router";
+import { WithRouterProps } from "next/dist/client/with-router";
 
 
 const Page = styled.div`
@@ -75,19 +77,23 @@ type FormValues = {
     rating: number;
 }
 
-const Form = withFormik<{}, FormValues>({
+type FormProps = WithRouterProps & Props;
+
+const Form = withRouter(withFormik<FormProps, FormValues>({
     mapPropsToValues: (props) => ({
         review: "",
         rating: -1,
     }),
     handleSubmit: async (values, { props }) => {
-        console.log(values);
+        if (!props.movie || !props.user) return;
+        await MovieService.writeReview(props.movie.id, values.review, props.user.id, values.rating);
+        props.router.back();
     },
     validationSchema: ValidationHelper.validateWriteReview,
-})(InnerForm);
+})(InnerForm));
 
 type Props = {
-    user: User | { name: string, profileImagePath?: string } | null;
+    user: User | { name: string, profileImagePath?: string, id: number } | null;
     movie?: {
         genres: string[],
         poster: string,
@@ -117,7 +123,7 @@ const WriteReviewPage: NextPage<Props> = (props) => {
             <Layout withMenu maxWidth={"768px"}>
                 <img src={props.movie.poster} alt="" className="poster"/>
                 <TitleComponent>{props.movie.title}</TitleComponent>
-                <Form/>
+                <Form {...props} />
             </Layout>
         </Page>
         <ToastContainer/>

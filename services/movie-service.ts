@@ -21,4 +21,13 @@ export default class MovieService {
         }
         return data;
     }
+
+    static async writeReview(id: number | string, content: string, author: number, rating: number): Promise<void> {
+        await client.post(ApiRoutes.writeReview(id), {
+            movie: id,
+            author,
+            content,
+            rating,
+        });
+    }
 }
