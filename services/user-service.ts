@@ -15,8 +15,6 @@ export default class UserService {
             return "invalid_error";
         }
 
-        alert(JSON.stringify(response.data));
-
         // save tokens
         AuthHelper.tokens = response.data;
         return "ok";
