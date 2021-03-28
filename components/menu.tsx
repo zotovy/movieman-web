@@ -2,6 +2,11 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "@/components/button";
 import Link from "next/link";
+import SearchElements from "@/components/search-elements";
+import { useDispatch, useSelector } from "react-redux";
+import { State } from "@/redux/reducers/root";
+import MovieService from "@/services/movie-service";
+import { setFoundedMovies } from "@/redux/actions/search-action";
 
 const Container = styled.menu`
     max-width: 1400px;
@@ -10,6 +15,7 @@ const Container = styled.menu`
     align-items: center;
     margin: 15px auto 0;
     padding: 0 20px;
+    position: relative;
 
     a.company {
         height: 40px;
@@ -172,9 +178,26 @@ type Props = {
 
 const MenuComponent: React.FC<Props> = (props) => {
     const [isMobileSearchCollapsed, setIsMobileSearchCollapsed] = useState(true);
-    const mobileSearchInput = useRef<HTMLInputElement>(null);
+    const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
 
+    const mobileSearchInput = useRef<HTMLInputElement>(null);
     const imagePath = props.user?.profileImagePath ?? "/images/user-avatar.png";
+
+    let searchString = "";
+
+    const foundedMovies = useSelector<State, Movie[]>(state => state.searchReducer.foundedMovies);
+    const dispatch = useDispatch();
+
+    const searchMovie = (q: string) => {
+        searchString = q;
+        if (q === "") return;
+        setTimeout(async () => {
+            if (q !== searchString || q === "") return;
+            const movies = await MovieService.searchMovie(q);
+            if (!movies) return;
+            dispatch(setFoundedMovies(movies));
+        }, 1000);
+    }
 
     return <Container>
         <Link href="/" passHref>
@@ -185,8 +208,16 @@ const MenuComponent: React.FC<Props> = (props) => {
         </Link>
 
         <label>
-            <input type="text" placeholder="Search movie"/>
+            <input
+                    type="text"
+                    onChange={(e) => searchMovie(e.target.value)}
+                    onFocus={() => setIsSearchDialogOpen(true)}
+                    onBlur={() => setIsSearchDialogOpen(false)}
+                    placeholder="Search movie"/>
             <img src="/icons/search.png" alt=""/>
+            <SearchElements
+                    isOpen={isSearchDialogOpen}
+                    movies={foundedMovies}/>
         </label>
 
         <div className={`mobile-search ${isMobileSearchCollapsed ? "closed" : ""}`}>
@@ -196,6 +227,9 @@ const MenuComponent: React.FC<Props> = (props) => {
                     ref={mobileSearchInput}
                     placeholder="Search movie"/>
             <img src="/icons/search.png" alt=""/>
+            <SearchElements
+                    isOpen={isSearchDialogOpen}
+                    movies={[]}/>
         </div>
 
         <div className="mobile-search-trigger" onClick={() => {

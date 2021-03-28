@@ -35,4 +35,9 @@ export default class MovieService {
         const res = await client.get(ApiRoutes.getReview(id));
         return res.data ?? null;
     }
+
+    static async searchMovie(q: string): Promise<Movie[]> {
+        const res = await client.get(ApiRoutes.searchMovie(q));
+        return res.data.movies ?? [];
+    }
 }

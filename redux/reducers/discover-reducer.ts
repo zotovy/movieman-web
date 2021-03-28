@@ -24,6 +24,7 @@ export type State = {
         Western: Movie[],
     },
     isGenresMoviesLoading: boolean,
+    foundedMovies: Movie[],
 }
 
 export const InitialState: State = {
@@ -49,6 +50,7 @@ export const InitialState: State = {
         Western: [],
     },
     isGenresMoviesLoading: false,
+    foundedMovies: [],
 }
 
 const reducer = (state: State = InitialState, action: AnyAction): State => {

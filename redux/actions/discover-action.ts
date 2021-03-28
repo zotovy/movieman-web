@@ -12,6 +12,7 @@ export const setMoviesFetchedByGenre =
 
 export const setIsGenresMoviesLoading = createAction<boolean>(DiscoverTypes.SET_IS_GENRES_MOVIES_LOADING);
 
+
 // ---------- Async actions ----------
 
 export function fetchMoviesByGenreAction(genre: MovieGenre): DiscoverThunkAction<void> {

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import styled from "styled-components";
 import FormatHelper from "@/helpers/format-helper";
 
@@ -13,10 +14,12 @@ const Container = styled.div`
     grid-template-columns: repeat(1, 1fr);
     grid-row-gap: 20px;
     box-shadow: 1px 5px 25px rgba(0, 0, 26, 0.15);
-    transition: transform 200ms ease, opacity 200ms ease;
+    transition: transform 200ms ease, opacity 200ms ease, visibility 200ms;
+    z-index: 1000;
+    visibility: initial;
     
     &.closed {
-        pointer-events: none;
+        visibility: hidden;
         opacity: 0;
         transform: translateX(-30%);
     }
@@ -28,6 +31,7 @@ const Tile = styled.div`
     align-items: center;
     width: 100%;
     cursor: pointer;
+    z-index: 1001;
 `;
 
 const Avatar = styled.div`
@@ -45,6 +49,7 @@ const MovieTitle = styled.span`
     font-size: 18px;
     letter-spacing: 0.03em;
     font-weight: normal;
+    text-decoration: none;
 `
 
 const MovieSubtitle = styled.p`
@@ -71,17 +76,21 @@ export type Props = {
 const MovieTile: React.FC<Movie> = (props) => {
     const ratingColor = FormatHelper.getRatingColor(props.rating);
 
-    return <Tile className="movie-tile">
-        <Avatar style={{ backgroundImage: `url(${ props.poster })` }}/>
-        <div>
-            <MovieTitle>{ props.title }</MovieTitle>
-            <MovieSubtitle>
-                <p className="rating" style={{ color: ratingColor }} >{ props.rating }</p>
-                <p>{ props.genres[0] }</p>
-                <p>{ props.year }</p>
-            </MovieSubtitle>
-        </div>
-    </Tile>
+    return <Link href={`/movie/${props.id}`} passHref>
+        <a>
+            <Tile className="movie-tile">
+                <Avatar style={{ backgroundImage: `url(${ props.poster })` }}/>
+                <div>
+                    <MovieTitle>{ props.title }</MovieTitle>
+                    <MovieSubtitle>
+                        <p className="rating" style={{ color: ratingColor }} >{ props.rating }</p>
+                        <p>{ props.genres[0] }</p>
+                        <p>{ props.year }</p>
+                    </MovieSubtitle>
+                </div>
+            </Tile>
+        </a>
+    </Link>
 }
 
 const SearchElements: React.FC<Props> = (props) => {

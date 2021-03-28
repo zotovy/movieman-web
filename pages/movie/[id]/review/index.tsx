@@ -120,7 +120,7 @@ const WriteReviewPage: NextPage<Props> = (props) => {
     return <React.Fragment>
         <Page>
             <MenuComponent user={props.user}/>
-            <Layout withMenu maxWidth={"768px"}>
+            <Layout withMenu styles={{ maxWidth: "768px"}}>
                 <img src={props.movie.poster} alt="" className="poster"/>
                 <TitleComponent>{props.movie.title}</TitleComponent>
                 <Form {...props} />

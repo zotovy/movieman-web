@@ -20,4 +20,5 @@ export default class ApiRoutes {
     static getReviews = (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}/reviews`);
     static getReview = (id: number | string) => ApiRoutes.buildRoute(`/review/${id}`);
     static writeComment = (id: number | string) => ApiRoutes.buildRoute(`/review/${id}/comment`);
+    static searchMovie = (q: string) => ApiRoutes.buildRoute(`/movie/search/${q}`);
 }

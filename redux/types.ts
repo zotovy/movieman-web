@@ -7,3 +7,7 @@ export enum ReviewTypes {
     setComments = "setComments",
     addComment = "addComment"
 }
+
+export enum SearchTypes {
+    setFoundedMovies = "setFoundedMovies"
+}
