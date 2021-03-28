@@ -6,7 +6,6 @@ import rootReducer, { State } from "./reducers/root";
 import { InitialState as DiscoverState } from "@/redux/reducers/discover-reducer";
 
 const initialState: State = {
-    signupReducer: {},
     discoverReducer: DiscoverState,
 };
 

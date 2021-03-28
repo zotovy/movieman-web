@@ -3,4 +3,5 @@ declare type ReviewComment = {
     author: User | number;
     content: string;
     createdAt: Date;
+    review: Review | number;
 }

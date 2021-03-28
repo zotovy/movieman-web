@@ -1,17 +1,16 @@
 import { combineReducers } from "redux";
 
-
-import signupReducer, { State as SignupState } from "@/redux/reducers/signup-reducer";
 import discoverReducer, { State as DiscoverState } from "@/redux/reducers/discover-reducer";
+import reviewReducer, { State as ReviewState } from "@/redux/reducers/review-reducer";
 
 const rootReducer = combineReducers({
     discoverReducer: discoverReducer,
-    signupReducer: signupReducer
+    reviewReducer: reviewReducer,
 });
 
 export type State = {
-    signupReducer: SignupState,
     discoverReducer: DiscoverState,
+    reviewReducer: ReviewState,
 }
 
 export default rootReducer;

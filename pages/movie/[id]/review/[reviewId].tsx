@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import Layout from "@/components/layout";
@@ -8,6 +8,10 @@ import MovieService from "@/services/movie-service";
 import ReviewComponent from "@/components/review";
 import Input from "@/components/input";
 import Comment from "@/components/comment";
+import { useDispatch, useSelector } from "react-redux";
+import { addCommentAction, setCommentsAction } from "@/redux/actions/review-action";
+import { State } from "@/redux/reducers/root";
+import ReviewService from "@/services/review-service";
 
 const Page = styled.div`
     width: 100%;
@@ -41,7 +45,28 @@ const Page = styled.div`
         left: 0;
 
         .input-component {
-            max-width: 984px;
+            max-width: 913px;
+        }
+
+        button {
+            flex: 0 0 56px;
+            width: 56px;
+            height: 56px;
+            margin-left: 15px;
+            border-radius: 10px;
+            background-color: ${props => props.theme.colors.primary};
+            border: none;
+            outline: none;
+            box-shadow: 1px 3px 10px rgba(76, 100, 205, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+
+            img {
+                width: 100%;
+            }
         }
     }
 `;
@@ -70,17 +95,50 @@ type Props = {
 }
 
 const ReviewDetailPage: NextPage<Props> = (props) => {
-
     if (!props.movie || !props.review) return <h1>404</h1>
 
+    const [message, setMessage] = useState("");
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setCommentsAction(props.review?.comments as ReviewComment[]));
+    }, []);
+
+
+    const writeComment = (e: any) => {
+        if (e.key && e.key !== "Enter") return;
+        if (message === "") return;
+        const reviewId = props.review?.id as number;
+
+        const comment: ReviewComment = {
+            id: -1,
+            content: message,
+            author: props.user as User,
+            createdAt: new Date(),
+            review: reviewId,
+        }
+
+        console.log(comment, props.user);
+        dispatch(addCommentAction(comment));
+
+        const createCommentRequest = { ...comment, author: (comment.author as User).id  };
+        ReviewService.writeComment(reviewId, createCommentRequest);
+        setMessage("");
+    }
+
+
     const author = props.review.author as User;
-    const comments = props.review.comments as ReviewComment[];
+    const comments = useSelector<State, ReviewComment[]>(state => state.reviewReducer.comments);
+
+    console.log(props.user);
 
     return <React.Fragment>
         <MenuComponent user={props.user}/>
-        <Layout withMenu maxWidth="1024px">
+        <Layout withMenu styles={{ maxWidth: "1024px", height: "initial", paddingBottom: "60px" }}>
             <Page>
+
                 <img src={props.movie.poster} alt="" className="poster"/>
+
                 <ReviewComponent
                         user={author}
                         rating={props.review.rating}
@@ -96,8 +154,17 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
                 }
 
                 <div className="write-comment-container">
-                    <Input placeholder="Enter your comment"/>
+                    <Input
+                            onKeyDown={writeComment}
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            placeholder="Enter your comment"/>
+                    <button
+                            onClick={writeComment}>
+                        <img src="/icons/sent.png" alt=""/>
+                    </button>
                 </div>
+
             </Page>
         </Layout>
     </React.Fragment>;
@@ -113,7 +180,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         props: {
             user,
             movie: await MovieService.fetchMovie(context.params?.id as string ?? 1) as Props["movie"] | undefined,
-            review: await MovieService.fetchReview(reviewId, movieId)
+            review: await MovieService.fetchReview(reviewId)
         }
     }
 }

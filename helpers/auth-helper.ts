@@ -57,6 +57,11 @@ export default class AuthHelper {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("uid");
     }
+
+    static get uid(): number {
+        const cookies = new Cookies();
+        return parseInt(cookies.get("uid"));
+    }
 }
 
 export type TokensBody = {

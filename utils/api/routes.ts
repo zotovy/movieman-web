@@ -18,4 +18,6 @@ export default class ApiRoutes {
     static updateUser = ApiRoutes.getUser;
     static writeReview = (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}/review`);
     static getReviews = (id: number | string) => ApiRoutes.buildRoute(`/movie/${id}/reviews`);
+    static getReview = (id: number | string) => ApiRoutes.buildRoute(`/review/${id}`);
+    static writeComment = (id: number | string) => ApiRoutes.buildRoute(`/review/${id}/comment`);
 }

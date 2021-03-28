@@ -31,10 +31,8 @@ export default class MovieService {
         });
     }
 
-    static async fetchReview(id: number | string, movieId: string | number): Promise<Review | null> {
-        const res = await client.get(ApiRoutes.getReviews(movieId));
-        const review = res.data.find((x: ReviewComment) => x.id == id);
-        console.log(review)
-        return review ?? null;
+    static async fetchReview(id: number | string): Promise<Review | null> {
+        const res = await client.get(ApiRoutes.getReview(id));
+        return res.data ?? null;
     }
 }
