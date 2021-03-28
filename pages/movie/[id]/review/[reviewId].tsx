@@ -118,7 +118,6 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
             review: reviewId,
         }
 
-        console.log(comment, props.user);
         dispatch(addCommentAction(comment));
 
         const createCommentRequest = { ...comment, author: (comment.author as User).id  };
@@ -129,8 +128,6 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
 
     const author = props.review.author as User;
     const comments = useSelector<State, ReviewComment[]>(state => state.reviewReducer.comments);
-
-    console.log(props.user);
 
     return <React.Fragment>
         <MenuComponent user={props.user}/>
@@ -155,6 +152,7 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
 
                 <div className="write-comment-container">
                     <Input
+                            pattern=""
                             onKeyDown={writeComment}
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
