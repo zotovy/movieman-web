@@ -1,18 +1,22 @@
 import styled, { css } from "styled-components";
 
+/**
+ * This styles is shared for Input and Textarea components
+ */
+
 const styles = css`
     width: 100%;
     background: ${props => props.theme.colors.lightBg};
     border: 1px solid #27283C;
-    box-sizing: border-box;
     border-radius: 10px;
-    font-size: 18px;
-    line-height: 22px;
-    outline: none;
     padding: 16px 20px;
-    transition: border 200ms ease;
-    color: ${props => props.theme.colors.text};
+    font-size: 18px;
     font-weight: normal;
+    line-height: 22px;
+    color: ${props => props.theme.colors.text};
+    outline: none;
+    box-sizing: border-box;
+    transition: border 200ms ease;
 
     &:focus {
         border: 1px solid #585b78;

@@ -4,13 +4,14 @@ import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import MenuComponent from "@/components/menu";
-import FormatHelper from "@/helpers/format-helper";
+import UiHelper from "@/helpers/ui-helper";
 import Button from "@/components/button";
 import TitleComponent from "@/components/title";
 import ReviewComponent from "@/components/review";
 import FadeInWhenVisible from "@/components/utils/animate-when-visible";
 import MovieService from "@/services/movie-service";
 import UserService from "@/services/user-service";
+import AppRoutes from "@/utils/app-routes";
 
 const Page = styled.main`
     width: 100%;
@@ -42,7 +43,7 @@ const Page = styled.main`
                 font-weight: bold;
                 font-size: 36px;
                 line-height: 43px;
-                color: ${props => props.theme.colors.text};
+                color: ${ props => props.theme.colors.text };
             }
 
             p.detail-info {
@@ -51,7 +52,7 @@ const Page = styled.main`
                 span {
                     font-weight: normal;
                     margin-right: 20px;
-                    color: ${props => props.theme.colors.textSecondary};
+                    color: ${ props => props.theme.colors.textSecondary };
 
                     &.rating {
                         font-weight: bold;
@@ -83,7 +84,7 @@ const Page = styled.main`
             span.write-review {
                 font-size: 18px;
                 line-height: 22px;
-                color: ${props => props.theme.colors.primary};
+                color: ${ props => props.theme.colors.primary };
                 cursor: pointer;
 
                 &:hover {
@@ -103,24 +104,7 @@ const Page = styled.main`
 `;
 
 type Props = {
-    movie?: {
-        genres: string[],
-        poster: string,
-        title: string,
-        year: string,
-        rating: number,
-        id: number,
-        kpId: number,
-        reviews: {
-            rating: number,
-            content: string,
-            author: User | { name: string, profileImagePath?: string },
-            comments: ReviewComment[],
-            createdAt: Date | any,
-            id: number,
-            movie: number,
-        }[],
-    },
+    movie: Movie | null,
     user: User | { name: string, profileImagePath?: string } | null;
 }
 
@@ -153,54 +137,55 @@ const pageVariants = {
 const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
     if (!movie) return <h1>404</h1>;
 
-    movie.reviews.forEach((x, i) => {
-        movie.reviews[i].createdAt = new Date(x.createdAt);
-    })
-    const ratingColor = FormatHelper.getRatingColor(movie.rating);
+    const ratingColor = UiHelper.getRatingColor(movie.rating);
 
     return <React.Fragment>
-        <MenuComponent user={user}/>
+        <MenuComponent user={ user }/>
         <motion.div
-                key={typeof window !== "undefined" ? location.pathname : undefined}
+                key={ typeof window !== "undefined" ? location.pathname : undefined }
                 initial="initial"
                 animate="in"
                 exit="exit"
-                variants={pageVariants}>
+                variants={ pageVariants }>
             <Page className="movie-detail-page">
                 <img
-                        src={movie.poster}
-                        alt={movie.title}
+                        src={ movie.poster }
+                        alt={ movie.title }
                         className="poster"/>
 
 
                 <section className="information">
                     <div className="info">
                         <motion.h1
-                                transition={{ delay: 0.2 }}
-                                initial={animation.text.from}
-                                animate={animation.text.to}>
-                            {movie.title}
+                                transition={ { delay: 0.2 } }
+                                initial={ animation.text.from }
+                                animate={ animation.text.to }>
+                            { movie.title }
                         </motion.h1>
                         <motion.p
-                                transition={{ delay: 0.25 }}
-                                initial={animation.text.from}
-                                animate={animation.text.to}
+                                transition={ { delay: 0.25 } }
+                                initial={ animation.text.from }
+                                animate={ animation.text.to }
                                 className="detail-info">
-                            <span className="rating" style={{ color: ratingColor }}>{ parseFloat(movie.rating.toFixed(1)) }</span>
-                            <span className="genres">{movie.genres.slice(0, 3).join(", ")}</span>
-                            <span className="year">{movie.year}</span>
+                            <span className="rating"
+                                  style={ { color: ratingColor } }>
+                                { parseFloat(movie.rating.toFixed(1)) }
+                            </span>
+                            <span className="genres">{ movie.genres.slice(0, 3).join(", ") }</span>
+                            <span className="year">{ movie.year }</span>
                         </motion.p>
                     </div>
+
                     <motion.div
-                            transition={{ delay: 0.2 }}
-                            initial={animation.text.from}
-                            animate={animation.text.to}
+                            transition={ { delay: 0.2 } }
+                            initial={ animation.text.from }
+                            animate={ animation.text.to }
                             className="buttons">
                         <Button
-                                onClick={() => window.open(`https://www.kinopoisk.ru/index.php?kp_query=${movie.title}`)}>
+                                onClick={ () => window.open(`https://www.kinopoisk.ru/index.php?kp_query=${ movie.title }`) }>
                             Найти на Кинопоиске
                         </Button>
-                        <Link href={`/movie/${movie.id}/review`}>
+                        <Link href={ AppRoutes.writeReview(movie.id) }>
                             <Button type="secondary">Оставить отзыв</Button>
                         </Link>
                     </motion.div>
@@ -209,21 +194,22 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
                 <section className="reviews">
                     <div className="header">
                         <TitleComponent>Отзывы Пользователей</TitleComponent>
-                        <Link href={`/movie/${movie.id}/review`}>
+                        <Link href={ AppRoutes.writeReview(movie.id) }>
                             <span className="write-review">Написать отзыв</span>
                         </Link>
                     </div>
+
                     <div className="review-grid">
                         {
-                            movie.reviews.map(review => <FadeInWhenVisible key={`review-${review.id}`}>
-                                       <Link href={`/movie/${movie.id}/review/${review.id}`}>
-                                           <a>
-                                               <ReviewComponent
-                                                       {...review}
-                                                       user={review.author}
-                                               />
-                                           </a>
-                                       </Link>
+                            movie.reviews.map(review => <FadeInWhenVisible key={ `review-${ review.id }` }>
+                                        <Link href={ AppRoutes.reviewDetail(movie.id, review.id) }>
+                                            <a>
+                                                <ReviewComponent
+                                                        { ...review }
+                                                        user={ review.author }
+                                                />
+                                            </a>
+                                        </Link>
                                     </FadeInWhenVisible>
                             )
                         }
@@ -237,10 +223,13 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const user = await UserService.fetchUserServerSide(context);
 
+    const movieId = context.params?.id as string ?? "1";
+    const movie = await MovieService.fetchMovie(movieId);
+
     return {
         props: {
             user,
-            movie: await MovieService.fetchMovie(context.params?.id as string ?? 1) as Props["movie"] | undefined,
+            movie,
         }
     }
 }

@@ -1,12 +1,14 @@
 import React, { useRef, useState } from "react";
-import styled from "styled-components";
-import Button from "@/components/button";
 import Link from "next/link";
-import SearchElements from "@/components/search-elements";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import AppRoutes from "@/utils/app-routes";
 import { State } from "@/redux/reducers/root";
-import MovieService from "@/services/movie-service";
 import { setFoundedMovies } from "@/redux/actions/search-action";
+
+import Button from "@/components/button";
+import SearchElements from "@/components/search-elements";
+import MovieService from "@/services/movie-service";
 
 const Container = styled.menu`
     max-width: 1400px;
@@ -200,13 +202,15 @@ const MenuComponent: React.FC<Props> = (props) => {
     }
 
     return <Container>
-        <Link href="/" passHref>
+        {/* Logo and title */}
+        <Link href={AppRoutes.homepage} passHref>
             <a className="company">
                 <img src="/images/logo.png" alt="logo" className="logo"/>
                 <h3 className="movieman-title">Movieman</h3>
             </a>
         </Link>
 
+        {/* Search field  */}
         <label>
             <input
                     type="text"
@@ -220,6 +224,7 @@ const MenuComponent: React.FC<Props> = (props) => {
                     movies={foundedMovies}/>
         </label>
 
+        {/* Mobile searched field */}
         <div className={`mobile-search ${isMobileSearchCollapsed ? "closed" : ""}`}>
             <input
                     onBlur={() => setIsMobileSearchCollapsed(true)}
@@ -232,33 +237,35 @@ const MenuComponent: React.FC<Props> = (props) => {
                     movies={[]}/>
         </div>
 
+        {/* A search button used to show a real search field only on mobile views */}
         <div className="mobile-search-trigger" onClick={() => {
             setIsMobileSearchCollapsed(!isMobileSearchCollapsed);
             mobileSearchInput?.current?.focus()
         }}>
             <img src="/icons/search.png" alt=""/>
+
         </div>
 
         {
             props.user
-                    ? <Link href="/profile">
+                    // User profile info
+                    ? <Link href={AppRoutes.profile}>
                         <div className="user-profile">
                             <div className="profile-image"
                                  style={{ backgroundImage: `url(${imagePath})` }}/>
                             <span className="name">{props.user.name}</span>
                         </div>
                     </Link>
+                    // Buttons "Login" and "Signup" if user unauthorized
                     : <div className="auth-buttons">
-                        <Link href="/login">
+                        <Link href={AppRoutes.login}>
                             <Button size="small" type="secondary">Login</Button>
                         </Link>
-                        <Link href="/signup">
+                        <Link href={AppRoutes.signup}>
                             <Button size="small" type="primary">Signup</Button>
                         </Link>
                     </div>
         }
-
-
     </Container>
 }
 

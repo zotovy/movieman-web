@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-const FadeInWhenVisible : React.FC = ({ children }) => {
+const FadeInWhenVisible: React.FC = ({ children }) => {
     const controls = useAnimation();
     const [ref, inView] = useInView();
 
@@ -22,8 +22,7 @@ const FadeInWhenVisible : React.FC = ({ children }) => {
                     variants={{
                         visible: { opacity: 1, y: 0 },
                         hidden: { opacity: 0, y: 30 }
-                    }}
-            >
+                    }}>
                 {children}
             </motion.div>
     );

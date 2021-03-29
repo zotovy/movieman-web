@@ -21,6 +21,7 @@ const defaultComment: ReviewComment = {
     author: 123,
     content: "cool!",
     createdAt: new Date(),
+    review: 123,
 };
 
 const TemplateDefault: Story<StoryProps> = (args) => {

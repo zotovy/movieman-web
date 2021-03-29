@@ -54,7 +54,7 @@ const Page = styled.div`
             height: 56px;
             margin-left: 15px;
             border-radius: 10px;
-            background-color: ${props => props.theme.colors.primary};
+            background-color: ${ props => props.theme.colors.primary };
             border: none;
             outline: none;
             box-shadow: 1px 3px 10px rgba(76, 100, 205, 0.2);
@@ -73,24 +73,7 @@ const Page = styled.div`
 
 type Props = {
     user: User | { name: string, profileImagePath?: string, id: number } | null;
-    movie?: {
-        genres: string[],
-        poster: string,
-        title: string,
-        year: string,
-        rating: number,
-        id: number,
-        kpId: number,
-        reviews: {
-            rating: number,
-            content: string,
-            author: User | { name: string, profileImagePath?: string },
-            comments: ReviewComment[],
-            createdAt: Date | any,
-            id: number,
-            movie: number,
-        }[],
-    },
+    movie: Movie | null,
     review: Review | null,
 }
 
@@ -120,7 +103,7 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
 
         dispatch(addCommentAction(comment));
 
-        const createCommentRequest = { ...comment, author: (comment.author as User).id  };
+        const createCommentRequest = { ...comment, author: (comment.author as User).id };
         ReviewService.writeComment(reviewId, createCommentRequest);
         setMessage("");
     }
@@ -130,35 +113,35 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
     const comments = useSelector<State, ReviewComment[]>(state => state.reviewReducer.comments);
 
     return <React.Fragment>
-        <MenuComponent user={props.user}/>
-        <Layout withMenu styles={{ maxWidth: "1024px", height: "initial", paddingBottom: "60px" }}>
+        <MenuComponent user={ props.user }/>
+        <Layout withMenu styles={ { maxWidth: "1024px", height: "initial", paddingBottom: "60px" } }>
             <Page>
 
-                <img src={props.movie.poster} alt="" className="poster"/>
+                <img src={ props.movie.poster } alt="" className="poster"/>
 
                 <ReviewComponent
-                        user={author}
-                        rating={props.review.rating}
-                        content={props.review.content}
-                        comments={comments}/>
+                        user={ author }
+                        rating={ props.review.rating }
+                        content={ props.review.content }
+                        comments={ comments }/>
 
                 {
                     comments.map(comment => <Comment
-                            key={`comment-${comment.id}`}
-                            user={comment.author as User}
-                            content={comment.content}/>
+                            key={ `comment-${ comment.id }` }
+                            user={ comment.author as User }
+                            content={ comment.content }/>
                     )
                 }
 
                 <div className="write-comment-container">
                     <Input
                             pattern=""
-                            onKeyDown={writeComment}
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
+                            onKeyDown={ writeComment }
+                            value={ message }
+                            onChange={ (e) => setMessage(e.target.value) }
                             placeholder="Enter your comment"/>
                     <button
-                            onClick={writeComment}>
+                            onClick={ writeComment }>
                         <img src="/icons/sent.png" alt=""/>
                     </button>
                 </div>
@@ -177,7 +160,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     return {
         props: {
             user,
-            movie: await MovieService.fetchMovie(context.params?.id as string ?? 1) as Props["movie"] | undefined,
+            movie: await MovieService.fetchMovie(movieId),
             review: await MovieService.fetchReview(reviewId)
         }
     }

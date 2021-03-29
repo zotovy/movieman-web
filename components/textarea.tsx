@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import InputBase from "@/components/utils/input-base";
 import { Container } from "@/components/input";
 

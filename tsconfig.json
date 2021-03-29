@@ -33,7 +33,6 @@
       "@types/utils"
     ],
     "types": [
-      "reflect-metadata",
       "jest"
     ]
   },

@@ -80,11 +80,11 @@ const Container = styled.div`
 
 export type Props = {
     loading?: boolean,
-    type?: "default" | "tall",
+    type?: MovieTileType,
     movies: Movie[],
 }
 
-const getTile = (i: number, loading: boolean | undefined, type: "default" | "tall", movie: Movie): React.ReactElement => {
+const getTile = (i: number, loading: boolean | undefined, type: MovieTileType, movie: Movie): React.ReactElement => {
     if (type === "default") return <motion.div
             key={`movie-${movie.id}-${type}`}
             initial={{ opacity: 0, x: 30 }}
@@ -102,27 +102,29 @@ const getTile = (i: number, loading: boolean | undefined, type: "default" | "tal
 }
 
 const MovieHorizontalList: React.FC<Props> = (props) => {
-    const type: "default" | "tall" = props.type ?? "default";
-    let { width } = useWindowSize();
-    width = width ?? 1920;
+    const type = props.type ?? "default";
+    let width = useWindowSize().width ?? 1920;
     const isTouchDevice = useTouchDevice();
 
-
+    // Calculate center percentage for react-responsive-carousel
     const amountItemsOnOnePage = Math.floor((Math.min(1400, width) / (type === "default" ? 450 : 190)));
     let centerPercentage = 100 / amountItemsOnOnePage;
 
+    // Amount of items on left and right sides (not their sum) from center tile
     const amountItemsOnSides = Math.floor(amountItemsOnOnePage / 2);
     const [currentSelectedMovie, setCurrentSelectedMovie] = useState(amountItemsOnSides);
 
+    // make a decision to use custom carousel or carousel from react-responsive-carousel package
+    const useCustomCarousel = ((isTouchDevice || width <= 968) && type === "tall")
+            || (centerPercentage < 100 && centerPercentage > 34 && type == "default");
+
+    // list of movie tiles used in carousel
+    const tiles = props.movies.map((movie, i) => getTile(i, props.loading, type, movie));
+
     return <Container>
         {
-            ((isTouchDevice || width <= 968) && type === "tall") || (centerPercentage < 100 && centerPercentage > 34 && type == "default")
-                    ? <div className="scroll-carousel">
-                        {
-                            props.movies.map((movie, i) => {
-                                return getTile(i, props.loading, type, movie);
-                            })
-                        }
+            useCustomCarousel
+                    ? <div className="scroll-carousel">{ tiles }
                     </div>
                     : <Carousel
                             onChange={(i) => setCurrentSelectedMovie(i)}
@@ -137,9 +139,7 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
                             renderArrowPrev={(clickHandler) => PrevArrow(currentSelectedMovie, amountItemsOnSides, clickHandler)}
                     >
                         {
-                            props.movies.map((movie, i) => {
-                                return getTile(i, props.loading, type, movie);
-                            })
+                            tiles
                         }
                     </Carousel>
 
@@ -148,15 +148,18 @@ const MovieHorizontalList: React.FC<Props> = (props) => {
 }
 
 const NextArrow = (i: number, amountItemsOnSides: number,  clickHandler: () => void): React.ReactNode => {
+    // this condition need to not render arrow when scrolled to the end
     if (i === 19 - amountItemsOnSides) return <React.Fragment/>;
+
     return <div className="arrow-next" onClick={clickHandler}>
         <img src="/icons/arrow-right.png" alt="right"  />
     </div>
 }
 
 const PrevArrow = (i: number, amountItemsOnSides: number, clickHandler: () => void): React.ReactNode => {
-    // if (i === 0) clickHandler();
+    // this condition need to not render arrow when scrolled to the end
     if (i <= amountItemsOnSides) return <React.Fragment/>;
+    
     return <div className="arrow-prev" onClick={clickHandler}>
         <img src="/icons/arrow-right.png" alt="right"  />
     </div>

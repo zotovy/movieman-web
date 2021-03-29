@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import FormatHelper from "@/helpers/format-helper";
+import UiHelper from "@/helpers/ui-helper";
 
 const Container = styled.div`
     position: absolute;
@@ -74,7 +74,7 @@ export type Props = {
 }
 
 const MovieTile: React.FC<Movie> = (props) => {
-    const ratingColor = FormatHelper.getRatingColor(props.rating);
+    const ratingColor = UiHelper.getRatingColor(props.rating);
 
     return <Link href={`/movie/${props.id}`} passHref>
         <a>

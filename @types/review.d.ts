@@ -1,8 +1,8 @@
 declare type Review = {
     id: number;
-    movie: Movie | number;
-    author: User | number;
-    comments: (ReviewComment | number)[];
+    movie: Movie;
+    author: User;
+    comments: ReviewComment[];
     content: string;
     rating: number;
     createdAt: Date;

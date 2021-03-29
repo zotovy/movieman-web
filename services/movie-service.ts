@@ -13,12 +13,20 @@ export default class MovieService {
         return response.data.movies;
     }
 
-    static async fetchMovie(id: number | string): Promise<Movie> {
+    static async fetchMovie(id: number | string): Promise<Movie | null> {
         const response = await client.get(ApiRoutes.getMovie(id));
         const data = response.data;
+
+        // return null if not found
+        if (response.status === 404) {
+            return null;
+        }
+
+        // Change profile image from 500px --> high quality image
         if (data?.poster?.includes("w500")) {
             data.poster = data.poster.replace("w500", "original");
         }
+
         return data;
     }
 
