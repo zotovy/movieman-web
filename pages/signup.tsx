@@ -4,7 +4,7 @@ import { withRouter } from "next/router";
 import { FormikProps, withFormik } from "formik";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import Layout from "@/components/layout";
+import Layout from "@/layouts/base-layout";
 import TitleComponent from "@/components/title";
 import Input from "@/components/input";
 import Button from "@/components/button";

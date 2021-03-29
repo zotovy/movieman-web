@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
-import Layout from "@/components/layout";
+import Layout from "@/layouts/base-layout";
 import { ToastContainer } from "react-toastify";
 import UserService from "@/services/user-service";
 import MenuComponent from "@/components/menu";

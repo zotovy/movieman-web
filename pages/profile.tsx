@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { withFormik, FormikProps } from "formik";
 import styled from "styled-components";
 import MenuComponent from "@/components/menu";
-import Layout from "@/components/layout";
+import Layout from "@/layouts/base-layout";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import ValidationHelper from "@/helpers/validation-helper";

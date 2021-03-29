@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const Layout = styled.main`
+const BaseLayout = styled.main`
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -46,9 +46,9 @@ const Component: React.FC<Props> = (props) => {
     return <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}>
-        <Layout className={withMenu} style={props.styles}>
+        <BaseLayout className={withMenu} style={props.styles}>
             { props.children }
-        </Layout>
+        </BaseLayout>
     </motion.div>
 }
 

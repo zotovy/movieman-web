@@ -25,7 +25,8 @@
       "@/utils/*": [ "utils/*" ],
       "@/components/*": [ "components/*" ],
       "@/helpers/*": [ "helpers/*" ],
-      "@/services/*": [ "services/*" ]
+      "@/services/*": [ "services/*" ],
+      "@/layouts/*": [ "layouts/*" ]
     },
     "typeRoots": [
       ".",
