@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
-import Layout from "@/layouts/base-layout";
-import MenuComponent from "@/components/menu";
-import UserService from "@/services/user-service";
-import MovieService from "@/services/movie-service";
-import ReviewComponent from "@/components/review";
-import Input from "@/components/input";
-import Comment from "@/components/comment";
 import { useDispatch, useSelector } from "react-redux";
 import { addCommentAction, setCommentsAction } from "@/redux/actions/review-action";
 import { State } from "@/redux/reducers/root";
+import Layout from "@/layouts/base-layout";
+import MenuComponent from "@/components/menu";
+import ReviewComponent from "@/components/review";
+import Input from "@/components/input";
+import Comment from "@/components/comment";
 import ReviewService from "@/services/review-service";
+import UserService from "@/services/user-service";
+import MovieService from "@/services/movie-service";
+import AppRoutes from "@/utils/app-routes";
 
 const Page = styled.div`
     width: 100%;
@@ -79,7 +81,12 @@ type Props = {
 }
 
 const ReviewDetailPage: NextPage<Props> = (props) => {
-    if (!props.movie || !props.review) return <h1>404</h1>
+    const router = useRouter();
+
+    if (!props.movie || !props.review) {
+        router.push(AppRoutes.error404);
+        return <h1>404</h1>;
+    }
 
     const [message, setMessage] = useState("");
     const dispatch = useDispatch();

@@ -1,8 +1,11 @@
 import React from "react";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import Link from "next/link"
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import AppRoutes from "@/utils/app-routes";
 import MenuComponent from "@/components/menu";
 import UiHelper from "@/helpers/ui-helper";
 import Button from "@/components/button";
@@ -11,8 +14,6 @@ import ReviewComponent from "@/components/review";
 import FadeInWhenVisible from "@/components/utils/animate-when-visible";
 import MovieService from "@/services/movie-service";
 import UserService from "@/services/user-service";
-import AppRoutes from "@/utils/app-routes";
-import Head from "next/head";
 
 const Page = styled.main`
     width: 100%;
@@ -136,7 +137,12 @@ const pageVariants = {
 }
 
 const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
-    if (!movie) return <h1>404</h1>;
+    const router = useRouter();
+
+    if (!movie) {
+        router.push(AppRoutes.error404);
+        return <h1>404</h1>;
+    }
 
     const ratingColor = UiHelper.getRatingColor(movie.rating);
 
