@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Head from "next/head";
 import { GetServerSideProps, NextPage } from "next";
 import styled from "styled-components";
 import Layout from "@/layouts/base-layout";
@@ -113,7 +114,12 @@ const ReviewDetailPage: NextPage<Props> = (props) => {
     const comments = useSelector<State, ReviewComment[]>(state => state.reviewReducer.comments);
 
     return <React.Fragment>
+        <Head>
+            <title>{ props.movie.title } review</title>
+        </Head>
+
         <MenuComponent user={ props.user }/>
+
         <Layout withMenu styles={ { maxWidth: "1024px", height: "initial", paddingBottom: "60px" } }>
             <Page>
 

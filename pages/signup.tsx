@@ -12,6 +12,7 @@ import ValidationHelper from "@/helpers/validation-helper";
 import UserService from "../services/user-service";
 import { WithRouterProps } from "next/dist/client/with-router";
 import UiHelper from "@/helpers/ui-helper";
+import Head from "next/head";
 
 export type FormValues = {
     name: string;
@@ -79,6 +80,10 @@ const Form = withRouter(withFormik<WithRouterProps, FormValues>({
 
 const SignupPage: NextPage = (props) => {
     return <React.Fragment>
+        <Head>
+            <title>Signup</title>
+        </Head>
+
         <Layout>
             <TitleComponent>Create new account</TitleComponent>
             <p className="subtitle">Please fill in the form to continue</p>

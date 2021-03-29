@@ -16,6 +16,7 @@ import Button from "@/components/button";
 import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from "next/router";
 import { WithRouterProps } from "next/dist/client/with-router";
+import Head from "next/head";
 
 
 const Page = styled.div`
@@ -44,29 +45,28 @@ const Page = styled.div`
         margin-top: 15px;
         width: 100%;
     }
-    
+
     button {
         margin-top: 20px;
     }
 `;
 
 const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
-
-    return <form onSubmit={(event) => {
-                console.log(props.values.rating);
-                props.handleSubmit(event);
-                if (props.values.rating === -1) UiHelper.showToast("Please, rate this film");
-            }}>
+    return <form onSubmit={ (event) => {
+        console.log(props.values.rating);
+        props.handleSubmit(event);
+        if (props.values.rating === -1) UiHelper.showToast("Please, rate this film");
+    } }>
         <Textarea
                 name="review"
                 placeholder="Write your review here"
-                onChange={props.handleChange}
-                error={props.touched.review ? props.errors.review : undefined}
-                maxLength={2048}/>
-        <RatingPicker onChange={i => props.setFieldValue("rating", i)}/>
+                onChange={ props.handleChange }
+                error={ props.touched.review ? props.errors.review : undefined }
+                maxLength={ 2048 }/>
+        <RatingPicker onChange={ i => props.setFieldValue("rating", i) }/>
         <Button
                 htmlType="submit"
-                disabled={!(props.isValid && props.dirty)}>
+                disabled={ !(props.isValid && props.dirty) }>
             Write review
         </Button>
     </form>
@@ -94,36 +94,22 @@ const Form = withRouter(withFormik<FormProps, FormValues>({
 
 type Props = {
     user: User | { name: string, profileImagePath?: string, id: number } | null;
-    movie?: {
-        genres: string[],
-        poster: string,
-        title: string,
-        year: string,
-        rating: number,
-        id: number,
-        kpId: number,
-        reviews: {
-            rating: number,
-            content: string,
-            author: User | { name: string, profileImagePath?: string },
-            comments: ReviewComment[],
-            createdAt: Date | any,
-            id: number,
-            movie: number,
-        }[],
-    },
+    movie: Movie | null,
 }
 
 const WriteReviewPage: NextPage<Props> = (props) => {
     if (!props.movie) return <h1>404</h1>;
 
     return <React.Fragment>
+        <Head>
+            <title>Write review for { props.movie.title }</title>
+        </Head>
         <Page>
-            <MenuComponent user={props.user}/>
-            <Layout withMenu styles={{ maxWidth: "768px"}}>
-                <img src={props.movie.poster} alt="" className="poster"/>
-                <TitleComponent>{props.movie.title}</TitleComponent>
-                <Form {...props} />
+            <MenuComponent user={ props.user }/>
+            <Layout withMenu styles={ { maxWidth: "768px" } }>
+                <img src={ props.movie.poster } alt="" className="poster"/>
+                <TitleComponent>{ props.movie.title }</TitleComponent>
+                <Form { ...props } />
             </Layout>
         </Page>
         <ToastContainer/>
@@ -133,10 +119,12 @@ const WriteReviewPage: NextPage<Props> = (props) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const user = await UserService.fetchUserServerSide(context);
 
+    const movieId = context.params?.id as string;
+
     return {
         props: {
             user,
-            movie: await MovieService.fetchMovie(context.params?.id as string ?? 1) as Props["movie"] | undefined,
+            movie: await MovieService.fetchMovie(movieId),
         }
     }
 }

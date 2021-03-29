@@ -13,6 +13,7 @@ import { fetchMoviesByGenreAction, setMoviesFetchedByGenre } from "@/redux/actio
 import { State } from "@/redux/reducers/root";
 import UserService from "../services/user-service";
 import SSRHelper from "@/helpers/ssr-helper";
+import Head from "next/head";
 
 const Page = styled.main`
     max-width: 1400px;
@@ -74,7 +75,12 @@ const HomePage: NextPage<Props> = (props) => {
     }, [selectedGenre]);
 
     return <React.Fragment>
+        <Head>
+            <title>Movieman</title>
+        </Head>
+
         <MenuComponent user={props.userData} />
+
         <Page className="home-page">
             <MovieHorizontalList movies={props.popularMovies} />
 

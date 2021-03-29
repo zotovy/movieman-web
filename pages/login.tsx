@@ -9,6 +9,7 @@ import Button from "@/components/button";
 import React from "react";
 import UserService from "../services/user-service";
 import ValidationHelper from "@/helpers/validation-helper";
+import Head from "next/head";
 
 
 const showToast = (status: string) => toast.error(
@@ -44,6 +45,10 @@ const LoginPage: NextPage = () => {
     }
 
     return <React.Fragment>
+        <Head>
+            <title>Login</title>
+        </Head>
+
         <Layout>
             <TitleComponent>Welcome Back!</TitleComponent>
             <p className="subtitle">Please, sign in to your account</p>

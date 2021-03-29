@@ -12,6 +12,7 @@ import FadeInWhenVisible from "@/components/utils/animate-when-visible";
 import MovieService from "@/services/movie-service";
 import UserService from "@/services/user-service";
 import AppRoutes from "@/utils/app-routes";
+import Head from "next/head";
 
 const Page = styled.main`
     width: 100%;
@@ -140,7 +141,12 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
     const ratingColor = UiHelper.getRatingColor(movie.rating);
 
     return <React.Fragment>
+        <Head>
+            <title>{ movie.title }</title>
+        </Head>
+
         <MenuComponent user={ user }/>
+
         <motion.div
                 key={ typeof window !== "undefined" ? location.pathname : undefined }
                 initial="initial"

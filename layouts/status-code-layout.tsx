@@ -3,6 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import Layout from "@/layouts/base-layout";
 import Button from "@/components/button";
+import Head from "next/head";
 
 const Text404 = styled.h1`
     font-size: 120px;
@@ -29,13 +30,19 @@ type Props = {
 }
 
 const StatusCodeLayout: React.FC<Props> = (props) => {
-    return <Layout>
-        <Text404>{ props.statusCode }</Text404>
-        <Subtitle>{ props.subtitle }</Subtitle>
-        <Link href={ props.pushTo }>
-            <Button style={{ width: "180px" }} type="secondary">{ props.buttonText }</Button>
-        </Link>
-    </Layout>
+    return <React.Fragment>
+        <Head>
+            <title>{ props.statusCode }</title>
+        </Head>
+
+        <Layout>
+            <Text404>{ props.statusCode }</Text404>
+            <Subtitle>{ props.subtitle }</Subtitle>
+            <Link href={ props.pushTo }>
+                <Button style={{ width: "180px" }} type="secondary">{ props.buttonText }</Button>
+            </Link>
+        </Layout>
+    </React.Fragment>
 }
 
 export default StatusCodeLayout;

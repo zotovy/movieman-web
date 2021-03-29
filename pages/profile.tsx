@@ -12,6 +12,7 @@ import ApiRoutes from "@/utils/api/routes";
 import UiHelper from "@/helpers/ui-helper";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import Head from "next/head";
 
 const UserAvatar = styled.div`
     width: 200px;
@@ -111,7 +112,12 @@ const ProfilePage: NextPage<Props> = (props) => {
     }
 
     return <React.Fragment>
+        <Head>
+            <title>{ props.user.name } profile</title>
+        </Head>
+
         <MenuComponent user={props.user}/>
+
         <Layout withMenu>
             <UserAvatar style={{ backgroundImage: `url(${userAvatar})` }}>
                 <input
