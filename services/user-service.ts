@@ -74,7 +74,7 @@ export default class UserService {
 
             if (response) return response.data;
             else {
-                context.res.writeHead(302, { Location: '/login' });
+                context.res.writeHead(302, { Location: '/500' });
                 context.res.end();
                 // @ts-ignore;
                 return null as User;
@@ -83,7 +83,7 @@ export default class UserService {
 
         if (response) return response.data;
         else {
-            context.res.writeHead(302, { Location: '/login' });
+            context.res.writeHead(302, { Location: '/500' });
             context.res.end();
             // @ts-ignore;
             return null as User;
