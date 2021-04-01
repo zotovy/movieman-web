@@ -14,6 +14,7 @@ import ReviewComponent from "@/components/review";
 import FadeInWhenVisible from "@/components/utils/animate-when-visible";
 import MovieService from "@/services/movie-service";
 import UserService from "@/services/user-service";
+import useWindowSize from "@/utils/hooks/useWindowSize";
 
 const Page = styled.main`
     width: 100%;
@@ -40,12 +41,21 @@ const Page = styled.main`
         justify-content: space-between;
         margin-top: 50px;
 
+        @media screen and (max-width: 960px) {
+            flex-direction: column;
+        }
+
         .info {
             h1 {
                 font-weight: bold;
                 font-size: 36px;
                 line-height: 43px;
                 color: ${ props => props.theme.colors.text };
+                
+                @media screen and (max-width: 960px) {
+                    font-size: 18px;
+                    line-height: 22px;
+                }
             }
 
             p.detail-info {
@@ -60,6 +70,11 @@ const Page = styled.main`
                         font-weight: bold;
                     }
                 }
+
+                @media screen and (max-width: 960px) {
+                    margin-top: 5px;
+                    font-size: 14px;
+                }
             }
         }
 
@@ -69,6 +84,19 @@ const Page = styled.main`
 
             button.primary {
                 margin-right: 30px;
+            }
+            
+            @media screen and (max-width: 960px) {
+                margin-top: 15px;
+                
+                button.primary {
+                    margin-right: 0;
+                    width: 100%;
+                }
+                
+                button.secondary {
+                    display: none;
+                }
             }
         }
     }
@@ -101,6 +129,22 @@ const Page = styled.main`
             grid-template-columns: repeat(2, 1fr);
             grid-column-gap: 50px;
             grid-row-gap: 50px;
+
+            @media screen and (max-width: 960px) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    }
+    
+    @media screen and (min-width: 960px) {
+        .mobile {
+            display: none;
+        }
+    }
+    
+    @media screen and (max-width: 960px) {
+        .desktop {
+            display: none;
         }
     }
 `;
@@ -207,7 +251,10 @@ const MovieDetailPage: NextPage<Props> = ({ movie, user }) => {
                     <div className="header">
                         <TitleComponent>Отзывы Пользователей</TitleComponent>
                         <Link href={ AppRoutes.writeReview(movie.id) }>
-                            <span className="write-review">Написать отзыв</span>
+                            <React.Fragment>
+                                <img src="/icons/plus.png" alt="" className="write-review mobile"/>
+                                <span className="write-review desktop">Написать отзыв</span>
+                            </React.Fragment>
                         </Link>
                     </div>
 
