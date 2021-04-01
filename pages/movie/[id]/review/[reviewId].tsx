@@ -71,6 +71,10 @@ const Page = styled.div`
                 width: 100%;
             }
         }
+        
+        @media screen and (max-width: 960px) {
+            padding: 0 20px
+        }
     }
 `;
 
