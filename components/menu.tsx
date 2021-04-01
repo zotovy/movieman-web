@@ -165,6 +165,10 @@ const Container = styled.menu`
             }
         }
 
+        .user-profile .profile-image {
+            margin-right: 0;
+        }
+        
         span.name {
             display: none;
         }
