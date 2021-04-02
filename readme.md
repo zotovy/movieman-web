@@ -4,7 +4,6 @@
 	Movieman
 </h1>
 
-***
 
 Service where you can write a review for your favourite movies, discuss with a moviegoer and find a great movie for your
 rest
