@@ -56,5 +56,5 @@ You can easily do it! First, check
 Here you can find instructions that can help to build this project. 
 
 ### Author
-This project was build by [Yaroslav Zotov](https://linktr.ee/zotovy).
+This project was build by [Yaroslav Zotov](https://linkup.zotov.dev/zotovy).
 
