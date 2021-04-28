@@ -14,16 +14,17 @@ import { State } from "@/redux/reducers/root";
 import UserService from "../services/user-service";
 import SSRHelper from "@/helpers/ssr-helper";
 import Head from "next/head";
+import { setFoundedMovies } from "@/redux/actions/search-action";
 
 const Page = styled.main`
     max-width: 1400px;
     margin: 50px auto 0;
-    
+
     h2 {
         padding: 0 10px;
         margin-top: 50px;
     }
-    
+
     .genre-container {
         padding: 0 10px;
         margin-top: 15px;
@@ -36,14 +37,14 @@ const Page = styled.main`
         ::-webkit-scrollbar {
             display: none;
         }
-        
+
         .category-item {
             margin-right: 21px;
         }
     }
-    
+
     @media screen and (max-width: 1400px) {
-        
+
     }
 `;
 
@@ -59,6 +60,7 @@ const HomePage: NextPage<Props> = (props) => {
     const [selectedGenre, setSelectedGenre] = useState<MovieGenre>(usedGenres[0]);
     const dispatch = useDispatch();
     let genreMovies = useSelector<State, Movie[]>(state => state.discoverReducer.moviesFetchedByGenre[selectedGenre]);
+    const foundedMovies = useSelector<State, Movie[]>(state => state.searchReducer.foundedMovies);
     if (genreMovies.length === 0) genreMovies = props.genreMovies;
     const isLoading = useSelector<State, boolean>(state => state.discoverReducer.isGenresMoviesLoading);
 
@@ -74,45 +76,50 @@ const HomePage: NextPage<Props> = (props) => {
         dispatch(fetchMoviesByGenreAction(selectedGenre));
     }, [selectedGenre]);
 
+
+    let searchString = "";
+    const searchMovie = (q: string) => {
+        searchString = q;
+        if (q === "") return;
+        setTimeout(async () => {
+            if (q !== searchString || q === "") return;
+            const movies = await MovieService.searchMovie(q);
+            if (!movies) return;
+            dispatch(setFoundedMovies(movies));
+        }, 1000);
+    }
+
     return <React.Fragment>
         <Head>
             <title>Movieman</title>
         </Head>
 
-        <MenuComponent user={props.userData} />
+        <MenuComponent
+                user={ props.userData }
+                foundedMovies={ foundedMovies }
+                onSearch={ searchMovie }
+                loading={ false }/>
 
         <Page className="home-page">
-            <MovieHorizontalList movies={props.popularMovies} />
+            <MovieHorizontalList movies={ props.popularMovies }/>
 
-            <motion.div transition={{ delay: 0.75 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <TitleComponent>Поиск по категориям</TitleComponent>
+            <motion.div transition={ { delay: 0.75 } } initial={ { opacity: 0 } } animate={ { opacity: 1 } }>
+                <TitleComponent>Search by categories</TitleComponent>
             </motion.div>
-            <motion.div transition={{ delay: 0.75 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="genre-container">
+            <motion.div transition={ { delay: 0.75 } } initial={ { opacity: 0 } } animate={ { opacity: 1 } }
+                        className="genre-container">
                 {
                     usedGenres.map(x => <CategoryItem
-                            key={x}
-                            onClick={() => setSelectedGenre(x)}
-                            selected={selectedGenre === x}>
+                            key={ x }
+                            onClick={ () => setSelectedGenre(x) }
+                            selected={ selectedGenre === x }>
                         { x }
                     </CategoryItem>)
                 }
             </motion.div>
 
-            <MovieHorizontalList loading={isLoading} type="tall" movies={genreMovies} />
+            <MovieHorizontalList loading={ isLoading } type="tall" movies={ genreMovies }/>
         </Page>
     </React.Fragment>
 }
-
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    const user = await UserService.fetchUserServerSide(context);
-
-    return {
-        props: {
-            userData: user,
-            popularMovies: await MovieService.fetchPopularMovies(),
-            genreMovies: await MovieService.fetchMoviesByGenre(usedGenres[0]),
-        }
-    }
-}
-
 export default HomePage;

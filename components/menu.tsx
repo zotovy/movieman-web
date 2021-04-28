@@ -1,14 +1,11 @@
 import React, { useRef, useState } from "react";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import AppRoutes from "@/utils/app-routes";
-import { State } from "@/redux/reducers/root";
-import { setFoundedMovies } from "@/redux/actions/search-action";
+import Skeleton from "react-loading-skeleton";
 
 import Button from "@/components/button";
 import SearchElements from "@/components/search-elements";
-import MovieService from "@/services/movie-service";
 
 const Container = styled.menu`
     max-width: 1400px;
@@ -175,11 +172,14 @@ const Container = styled.menu`
     }
 `;
 
-type Props = {
+export type Props = {
     user: User | {
         name: string,
         profileImagePath?: string;
     } | null,
+    loading?: boolean,
+    foundedMovies: Movie[],
+    onSearch: (a: string) => any,
 };
 
 const MenuComponent: React.FC<Props> = (props) => {
@@ -189,21 +189,6 @@ const MenuComponent: React.FC<Props> = (props) => {
     const mobileSearchInput = useRef<HTMLInputElement>(null);
     const imagePath = props.user?.profileImagePath ?? "/images/user-avatar.png";
 
-    let searchString = "";
-
-    const foundedMovies = useSelector<State, Movie[]>(state => state.searchReducer.foundedMovies);
-    const dispatch = useDispatch();
-
-    const searchMovie = (q: string) => {
-        searchString = q;
-        if (q === "") return;
-        setTimeout(async () => {
-            if (q !== searchString || q === "") return;
-            const movies = await MovieService.searchMovie(q);
-            if (!movies) return;
-            dispatch(setFoundedMovies(movies));
-        }, 1000);
-    }
 
     return <Container>
         {/* Logo and title */}
@@ -218,14 +203,14 @@ const MenuComponent: React.FC<Props> = (props) => {
         <label>
             <input
                     type="text"
-                    onChange={(e) => searchMovie(e.target.value)}
+                    onChange={(e) => props.onSearch(e.target.value)}
                     onFocus={() => setIsSearchDialogOpen(true)}
                     onBlur={() => setIsSearchDialogOpen(false)}
                     placeholder="Search movie"/>
             <img src="/icons/search.png" alt=""/>
             <SearchElements
                     isOpen={isSearchDialogOpen}
-                    movies={foundedMovies}/>
+                    movies={props.foundedMovies}/>
         </label>
 
         {/* Mobile searched field */}
@@ -251,7 +236,9 @@ const MenuComponent: React.FC<Props> = (props) => {
         </div>
 
         {
-            props.user
+            props.loading
+                ? <Skeleton width={150} height={40} style={{ borderRadius: "5px", marginLeft: "30px" }} />
+                : props.user
                     // User profile info
                     ? <Link href={AppRoutes.profile}>
                         <div className="user-profile">
